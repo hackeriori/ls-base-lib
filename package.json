@@ -1,0 +1,38 @@
+{
+  "name": "ls-base-lib",
+  "version": "1.2.15",
+  "description": "无框架依赖(例如vue这类框架)的js和css库,用于工作",
+  "main": "dist/lsBaseLib.umd.js",
+  "module": "dist/lsBaseLib.es.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/song_qing_xing/ls-base-lib"
+  },
+  "homepage": "https://song_qing_xing.gitee.io/ls-base-lib/",
+  "files": [
+    "dist"
+  ],
+  "typings": "dist/out/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node --loader ts-node/esm build.ts",
+    "buildHtml": "vite build --config vite.config.html.ts",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.4",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "axios": "^1.7.7",
+    "element-plus": "^2.8.6",
+    "jest": "^28.1.2",
+    "jest-environment-jsdom": "^28.1.2",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5",
+    "vue-tsc": "^2.1.10"
+  }
+}

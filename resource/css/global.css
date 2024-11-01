@@ -1,0 +1,10 @@
+html, body, .appContainer {
+  margin: 0;
+  height: 100%;
+}
+
+.appContainer {
+  font-size: 14px;
+  color: var(--el-text-color-primary);
+  overflow: hidden;
+}

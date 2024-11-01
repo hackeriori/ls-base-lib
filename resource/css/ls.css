@@ -1,0 +1,266 @@
+/*绝对布局*/
+.ls-abs-outer {
+  position: relative;
+}
+
+.ls-abs-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/*flex布局*/
+/*-4种布局框架-*/
+.ls-flex {
+  display: flex;
+}
+
+.ls-flexV {
+  display: flex;
+  flex-direction: column;
+}
+
+.ls-flexWap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ls-flexWapV {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+/*-对齐方式-*/
+.ls-flex-center {
+  justify-content: center;
+}
+
+.ls-flex-centerV {
+  align-items: center;
+}
+
+.ls-flex-end {
+  justify-content: flex-end;
+}
+
+.ls-flex-endV {
+  align-items: flex-end;
+}
+
+.ls-flex-between {
+  justify-content: space-between;
+}
+
+.ls-flex-around {
+  justify-content: space-around;
+}
+
+/*flex子项属性*/
+.ls-flex-unShrink > div {
+  flex-shrink: 0;
+}
+
+.ls-flex-unShrink > .ls-flex-subItem-grow {
+  flex-grow: 1;
+  width: 0;
+}
+
+.ls-flex-unShrink > .ls-flex-subItem-growV {
+  flex-grow: 1;
+  height: 0;
+}
+
+/*容器高度*/
+.height100 {
+  height: 100%;
+}
+
+.width100 {
+  width: 100%;
+}
+
+/*文本超出长度后显示省略号*/
+.ls-text-unWarp {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ls-text-rtl {
+  direction: rtl;
+}
+
+/*文本居中显示*/
+.ls-text-center {
+  text-align: center;
+}
+
+/*间隔相关*/
+.ls-margin {
+  margin: 1em
+}
+
+.ls-marginV {
+  margin: 1em 0;
+}
+
+.ls-marginH {
+  margin: 0 1em
+}
+
+.ls-margin-top {
+  margin-top: 1em;
+}
+
+.ls-margin-bottom {
+  margin-bottom: 1em;
+}
+
+/*间隔半行文本*/
+.ls-margin-half {
+  margin: 0.5em 0;
+}
+
+.ls-margin-top-half {
+  margin-top: 0.5em;
+}
+
+.ls-margin-bottom-half {
+  margin-bottom: 0.5em;
+}
+
+/*间隔一行文本*/
+.ls-padding {
+  padding: 1em 0;
+  box-sizing: border-box;
+}
+
+.ls-padding-top {
+  padding-top: 1em;
+  box-sizing: border-box;
+}
+
+.ls-padding-bottom {
+  padding-bottom: 1em;
+  box-sizing: border-box;
+}
+
+/*间隔半行文本*/
+.ls-padding-half {
+  padding: 0.5em 0;
+  box-sizing: border-box;
+}
+
+.ls-padding-top-half {
+  padding-top: 0.5em;
+  box-sizing: border-box;
+}
+
+.ls-padding-bottom-half {
+  padding-bottom: 0.5em;
+  box-sizing: border-box;
+}
+
+/*可交互文字样式*/
+.ls-text-hover {
+  cursor: pointer;
+}
+
+.ls-text-hover:hover {
+  color: var(--el-color-primary);
+}
+
+/*面板样式*/
+.ls-panel {
+  background-color: var(--el-color-white);
+  border: var(--el-border);
+  box-shadow: var(--el-box-shadow);
+  border-radius: var(--el-border-radius-base);
+}
+
+/*结合vue transition动画的样式*/
+.ls-am-right-enter-active,
+.ls-am-right-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-right-enter-from,
+.ls-am-right-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.ls-am-bottom-enter-active,
+.ls-am-bottom-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-bottom-enter-from,
+.ls-am-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.ls-am-left-enter-active,
+.ls-am-left-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-left-enter-from,
+.ls-am-left-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.ls-am-left-enter-active,
+.ls-am-left-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-left-enter-from,
+.ls-am-left-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.ls-am-top-enter-active,
+.ls-am-top-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-top-enter-from,
+.ls-am-top-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.ls-am-center-enter-active,
+.ls-am-center-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-center-enter-from,
+.ls-am-center-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.ls-am-center-fix-enter-active,
+.ls-am-center-fix-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+
+.ls-am-center-fix-enter-from,
+.ls-am-center-fix-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}
