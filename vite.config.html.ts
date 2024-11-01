@@ -6,7 +6,7 @@ export default defineConfig({
   base: './',
   build: {
     target: 'esnext',
-    outDir: 'build',
+    outDir: 'docs',
   },
   plugins: [
     vue(),
