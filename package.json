@@ -1,7 +1,7 @@
 {
   "name": "ls-base-lib",
   "version": "1.2.15",
-  "description": "无框架依赖(例如vue这类框架)的js和css库,用于工作",
+  "description": "A library with no framework dependencies (e.g. vue) that encapsulates some pure native js and css. It is exported using module and umd.",
   "main": "dist/lsBaseLib.umd.js",
   "module": "dist/lsBaseLib.es.js",
   "repository": {
