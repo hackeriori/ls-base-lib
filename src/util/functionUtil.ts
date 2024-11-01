@@ -1,5 +1,3 @@
-import ArrayLike = jasmine.ArrayLike;
-
 interface DebounceReturnFunType<T extends (...args: any) => any> {
   (...arg: Parameters<T>): void,
 

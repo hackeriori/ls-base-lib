@@ -1,3 +1,4 @@
+import {describe, expect, test} from 'vitest';
 import {arrGroupBy, arrRemove} from './arrayUtil';
 
 describe("数组移除测试", () => {

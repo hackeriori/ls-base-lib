@@ -1,3 +1,4 @@
+import {describe, expect, test, it, vi} from 'vitest';
 import {funDebounce, funTaskRun} from "./functionUtil";
 
 describe('防抖测试', () => {
@@ -80,8 +81,8 @@ describe('funTimeoutRun测试', () => {
     // Arrange
     const tasks = [1, 2, 3, 4, 5];
     const numberPerTime = 2;
-    const taskHandler = jest.fn();
-    const doneCallback = jest.fn();
+    const taskHandler = vi.fn();
+    const doneCallback = vi.fn();
 
     // Act
     await new Promise<boolean>(resolve => {
@@ -100,8 +101,8 @@ describe('funTimeoutRun测试', () => {
     // Arrange
     const tasks = 3; // number of tasks
     const numberPerTime = 1;
-    const taskHandler = jest.fn();
-    const doneCallback = jest.fn();
+    const taskHandler = vi.fn();
+    const doneCallback = vi.fn();
 
     // Act
     await new Promise<boolean>(resolve => {
@@ -121,11 +122,11 @@ describe('funTimeoutRun测试', () => {
     const tasks = [1, 2, 3, 4, 5];
     const numberPerTime = 2;
     let breaker: Function;
-    const taskHandler = jest.fn((task: number) => {
+    const taskHandler = vi.fn((task: number) => {
       if (task === 3) breaker(); // interrupt at task 3
     });
     let isBreak = false;
-    const doneCallback = jest.fn((_isBreak: boolean) => {
+    const doneCallback = vi.fn((_isBreak: boolean) => {
       isBreak = _isBreak;
     })
 
@@ -147,8 +148,8 @@ describe('funTimeoutRun测试', () => {
     // Arrange
     const tasks: any[] = [];
     const numberPerTime = 2;
-    const taskHandler = jest.fn();
-    const doneCallback = jest.fn();
+    const taskHandler = vi.fn();
+    const doneCallback = vi.fn();
 
     // Act
     await new Promise<boolean>(resolve => {
