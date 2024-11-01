@@ -11,8 +11,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": [],
-    "skipLibCheck": true,
+    "lib": [
+      "dom"
+    ],
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
