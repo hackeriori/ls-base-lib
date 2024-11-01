@@ -6,9 +6,9 @@
   "module": "dist/lsBaseLib.es.js",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/song_qing_xing/ls-base-lib"
+    "url": "https://github.com/hackeriori/ls-base-lib"
   },
-  "homepage": "https://song_qing_xing.gitee.io/ls-base-lib/",
+  "homepage": "https://hackeriori.github.io/ls-base-lib",
   "files": [
     "dist"
   ],
