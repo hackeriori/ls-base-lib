@@ -6,13 +6,13 @@ describe("数组移除测试", () => {
   const arr1 = new Array(smallMax).fill(0).map((_item, index) => index);
   const arr2 = new Array(smallMax).fill(0).map((_item, index) => index);
 
-  test("使用传统方法移除第一项，注意看时间", () => {
+  test("使用传统方法移除第一项，注意看时间，约3600ms", () => {
     for (let i = 0; i < smallMax; i++) {
       arr1.splice(0, 1);
     }
     expect(arr1.length).toBe(0);
   })
-  test("使用无序移除方法移除第一项，注意看时间", () => {
+  test("使用无序移除方法移除第一项，注意看时间，约10ms", () => {
     for (let i = 0; i < smallMax; i++) {
       arrRemove(arr2, 0);
     }
