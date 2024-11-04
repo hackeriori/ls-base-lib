@@ -1,5 +1,5 @@
-import {describe, expect, test, it, vi} from 'vitest';
-import {funDebounce, funTaskRun} from "./functionUtil";
+import {describe, expect, test, it, vi, beforeEach} from 'vitest';
+import {funDebounce, funIdleRun, funTaskRun} from "./functionUtil";
 
 describe('防抖测试', () => {
   const testBounceFun = async (fun: Function, executeTime: number) => {
@@ -74,93 +74,153 @@ describe('防抖测试', () => {
     }, 200);
     expect(test.count).toBe(2);
   });
-})
+});
 
-describe('funTimeoutRun测试', () => {
-  it('应按指定的任务执行任务，并在完成后调用doneCallback', async () => {
-    // Arrange
+// 模拟 requestIdleCallback
+(global as any).requestIdleCallback = vi.fn((callback) => {
+  setTimeout(() => callback({
+    timeRemaining: () => 50 // 模拟一个足够的时间片
+  }))
+});
+
+describe('funIdleRun', () => {
+  beforeEach(() => {
+    vi.useFakeTimers(); // 使用 Vitest 的虚拟计时器
+  });
+  it('当空闲时间足够时应该执行所有任务', () => {
+    const tasks = [1, 2, 3];
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    funIdleRun(tasks, taskHandler, finishCallback);
+    vi.runAllTimers();
+
+    expect(requestIdleCallback).toHaveBeenCalled();
+    expect(taskHandler).toHaveBeenCalledTimes(tasks.length);
+    expect(finishCallback).toHaveBeenCalledWith(false); // 完成没有被中断
+  });
+
+  it('空数组任务应该不会执行回调', () => {
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    funIdleRun([], taskHandler, finishCallback);
+    vi.runAllTimers();
+
+    expect(taskHandler).not.toHaveBeenCalled();
+    expect(finishCallback).toHaveBeenCalledWith(false); // 直接完成，没有处理任务
+  });
+
+  it('当被中断时应该能正常中断', () => {
+    const tasks = [1, 2, 3];
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    const breakExecution = funIdleRun(tasks, taskHandler, finishCallback);
+    breakExecution(); // 中断执行
+    vi.runAllTimers();
+
+    expect(requestIdleCallback).toHaveBeenCalled();
+    expect(taskHandler).toHaveBeenCalledTimes(0); // 不应执行任何任务
+    expect(finishCallback).toHaveBeenCalledWith(true); // 被中断
+  });
+
+  it('数字类空任务应该不会执行', () => {
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    funIdleRun(0, taskHandler, finishCallback);
+    vi.runAllTimers();
+
+    expect(taskHandler).not.toHaveBeenCalled();
+    expect(finishCallback).toHaveBeenCalledWith(false); // 直接完成，没有处理任务
+  });
+
+  it('数字类任务应该能正常执行', () => {
+    const tasks = 5;
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    funIdleRun(tasks, taskHandler, finishCallback);
+    vi.runAllTimers();
+
+    expect(requestIdleCallback).toHaveBeenCalled();
+    expect(taskHandler).toHaveBeenCalledTimes(tasks); // 应该执行对应次任务
+    expect(finishCallback).toHaveBeenCalledWith(false); // 完成没有被中断
+  });
+});
+
+describe('funTaskRun测试', () => {
+  beforeEach(() => {
+    vi.useFakeTimers(); // 使用 Vitest 的虚拟计时器
+  });
+
+  it('应该能使用给定数组正确执行', () => {
     const tasks = [1, 2, 3, 4, 5];
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
     const numberPerTime = 2;
-    const taskHandler = vi.fn();
-    const doneCallback = vi.fn();
 
-    // Act
-    await new Promise<boolean>(resolve => {
-      funTaskRun(tasks, numberPerTime, taskHandler, () => {
-        doneCallback(); // call doneCallback after finished executing all tasks
-        resolve(true); // resolve the promise after doneCallback is called
-      });
-    })
+    funTaskRun(tasks, numberPerTime, taskHandler, finishCallback);
 
-    // Assert
-    expect(taskHandler).toHaveBeenCalledTimes(5); // 5 tasks in total
-    expect(doneCallback).toHaveBeenCalled(); // doneCallback should be called when finished
+    // 立即推进计时器，让任务开始执行
+    vi.runAllTimers();
+
+    // 验证任务处理函数是否按预期被调用
+    expect(taskHandler).toHaveBeenCalledTimes(tasks.length);
+    expect(taskHandler).toHaveBeenCalledWith(1, 0);
+    expect(taskHandler).toHaveBeenCalledWith(2, 1);
+    expect(taskHandler).toHaveBeenCalledWith(3, 2);
+    expect(taskHandler).toHaveBeenCalledWith(4, 3);
+    expect(taskHandler).toHaveBeenCalledWith(5, 4);
+
+    // 验证完成回调是否被正确调用
+    expect(finishCallback).toHaveBeenCalledWith(false);
   });
 
-  it('应正确处理任务数', async () => {
-    // Arrange
-    const tasks = 3; // number of tasks
-    const numberPerTime = 1;
-    const taskHandler = vi.fn();
-    const doneCallback = vi.fn();
-
-    // Act
-    await new Promise<boolean>(resolve => {
-      funTaskRun(tasks, numberPerTime, taskHandler, () => {
-        doneCallback(); // call doneCallback after finished executing all tasks
-        resolve(true); // resolve the promise after doneCallback is called
-      });
-    })
-
-    // Assert
-    expect(taskHandler).toHaveBeenCalledTimes(3); // 3 tasks in total
-    expect(doneCallback).toHaveBeenCalled(); // doneCallback should be called when finished
-  });
-
-  it('应该能正确中断', async () => {
-    // Arrange
+  it('应该能正确中断', () => {
     const tasks = [1, 2, 3, 4, 5];
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
     const numberPerTime = 2;
-    let breaker: Function;
-    const taskHandler = vi.fn((task: number) => {
-      if (task === 3) breaker(); // interrupt at task 3
-    });
-    let isBreak = false;
-    const doneCallback = vi.fn((_isBreak: boolean) => {
-      isBreak = _isBreak;
-    })
+    const breakExecution = funTaskRun(tasks, numberPerTime, taskHandler, finishCallback);
 
-    // Act
-    await new Promise<boolean>(resolve => {
-      breaker = funTaskRun(tasks, numberPerTime, taskHandler, isBreak => {
-        doneCallback(isBreak); // call doneCallback after finished executing all tasks
-        resolve(true); // resolve the promise after doneCallback is called
-      });
-    })
+    // 立即推进计时器，让任务开始执行
+    vi.runOnlyPendingTimers();
 
-    // Assert
-    expect(taskHandler).toHaveBeenCalledTimes(3);
-    expect(doneCallback).toHaveBeenCalled();
-    expect(isBreak).toBe(true);
+    // 中断任务
+    breakExecution();
+
+    // 再次推进计时器
+    vi.runAllTimers();
+
+    // 验证任务处理函数是否被调用（由于每次执行两次任务，加上执行一次之后中断，实际只运行了两次，后面的没有运行）
+    expect(taskHandler).toHaveBeenCalledTimes(2);
+    expect(finishCallback).toHaveBeenCalledWith(true);
   });
 
-  it('应能正确处理空数组', async () => {
-    // Arrange
-    const tasks: any[] = [];
-    const numberPerTime = 2;
+  it('当没有任务的时候，应该能正确执行完成回调', () => {
     const taskHandler = vi.fn();
-    const doneCallback = vi.fn();
+    const finishCallback = vi.fn();
 
-    // Act
-    await new Promise<boolean>(resolve => {
-      funTaskRun(tasks, numberPerTime, taskHandler, () => {
-        doneCallback(); // call doneCallback after finished executing all tasks
-        resolve(true); // resolve the promise after doneCallback is called
-      });
-    })
+    const numberPerTime = 2;
+    funTaskRun([], numberPerTime, taskHandler, finishCallback);
 
-    // Assert
-    expect(taskHandler).not.toHaveBeenCalled(); // 0 tasks in total
-    expect(doneCallback).toHaveBeenCalled(); // doneCallback should be called when finished
-  })
+    // 验证完成回调是否被正确调用
+    expect(finishCallback).toHaveBeenCalledWith(false);
+  });
+
+  it('使用数字代替数组的时候，不应该报错', () => {
+    const taskHandler = vi.fn();
+    const finishCallback = vi.fn();
+
+    expect(() => {
+      funTaskRun(5, 2, taskHandler, finishCallback);
+      vi.runAllTimers();
+    }).not.toThrow();
+    // 验证完成回调是否被正确调用
+    expect(finishCallback).toHaveBeenCalledWith(false);
+  });
 });
