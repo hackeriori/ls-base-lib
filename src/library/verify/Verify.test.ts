@@ -1,3 +1,4 @@
+import {describe, expect, test} from 'vitest';
 import Verify from "./Verify";
 
 describe('验证测试', () => {
@@ -70,6 +71,7 @@ describe('验证测试', () => {
     }
   }
 
+  // 这里使用any避免类型错误
   const t: any = new testClass();
 
   test('静态方法验证', () => {

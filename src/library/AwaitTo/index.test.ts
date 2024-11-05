@@ -1,7 +1,8 @@
+import {describe, expect, test} from 'vitest';
 import AwaitTo from './index'
 import type {Equal, Expect} from "../../toolTypes";
 import {APIResponse, DefaultGetInfoType, MasApiType, PassToResultType} from "./ToResult/types";
-import axios, {AxiosResponse} from "axios";
+import axios, {type AxiosResponse} from "axios";
 
 type cases<T> = [
   //默认类型
