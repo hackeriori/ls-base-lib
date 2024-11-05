@@ -1,3 +1,4 @@
+import {describe, expect, test} from 'vitest';
 import {strGetStringExtension, strGetUrlParam, strInsertAt, strReplaceHost} from "./stringUtil";
 
 describe("测试字符串插入方法", () => {
