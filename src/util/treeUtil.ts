@@ -8,7 +8,7 @@ type NodeType<T, ChildKey extends keyof T> = {
  * @param predicate
  * @param childKey 子节点键名（默认children）
  */
-export function treeFind<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], predicate: (node: T, parent?: T) => boolean, childKey = 'children' as ChildKey): T | undefined {
+export function treeFind<T extends NodeType<T, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], predicate: (node: T, parent?: T) => boolean, childKey = 'children' as ChildKey): T | undefined {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (predicate(node))
@@ -31,7 +31,7 @@ export function treeFind<T extends NodeType<T, ChildKey>, R extends NodeType<R, 
  * @param parent
  * @param childKey 子节点键名（默认children）
  */
-function _treeFind<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], predicate: (node: T, parent?: T) => boolean, parent?: T, childKey = 'children' as ChildKey): T | undefined {
+function _treeFind<T extends NodeType<T, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], predicate: (node: T, parent?: T) => boolean, parent?: T, childKey = 'children' as ChildKey): T | undefined {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (predicate(node, parent))
@@ -53,7 +53,7 @@ function _treeFind<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildK
  * @param callback 遍历节点的回调方法
  * @param childKey 子节点键名（默认children）
  */
-export function treeForEach<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => void, childKey = 'children' as ChildKey) {
+export function treeForEach<T extends NodeType<T, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => void, childKey = 'children' as ChildKey) {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     callback(node);
@@ -70,7 +70,7 @@ export function treeForEach<T extends NodeType<T, ChildKey>, R extends NodeType<
  * @param parent 节点的父节点
  * @param childKey 子节点键名（默认children）
  */
-function _treeForEach<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => void, parent?: T, childKey = 'children' as ChildKey) {
+function _treeForEach<T extends NodeType<T, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => void, parent?: T, childKey = 'children' as ChildKey) {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     callback(node, parent);

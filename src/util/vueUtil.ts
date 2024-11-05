@@ -17,7 +17,7 @@ export function vueGetParamFromQuery(query: Record<string, (string | null) | (st
 }
 
 /**
- * 注入帮助类，与Methods混合使用
+ * 注入帮助类，与Methods混合使用，适用于vue2
  */
 export class VueInjectHelper<Provide, Tuple extends any[] = []> {
   injects: string[] = [];
@@ -33,6 +33,6 @@ export class VueInjectHelper<Provide, Tuple extends any[] = []> {
 }
 
 /**
- * 提供按InjectHelper与Provide混合
+ * 提供按InjectHelper与Provide混合，适用于vue2
  */
 export type VueMixinMethods<Provide, InjectHelper extends readonly any[]> = Partial<Pick<Provide, InjectHelper[number]>>

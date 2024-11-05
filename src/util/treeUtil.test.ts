@@ -1,3 +1,4 @@
+import {describe, expect, test} from 'vitest';
 import {treeFind, treeForEach, treeMap} from "./treeUtil";
 
 interface TreeNodeA {
@@ -12,10 +13,7 @@ interface TreeNodeB {
   list: TreeNodeB[] | null | undefined,
 }
 
-interface TreeNodeC {
-  id: number,
-  name: string,
-  children: TreeNodeA[] | null,
+interface TreeNodeC extends TreeNodeA{
   parentID?: number,
 }
 
@@ -55,12 +53,15 @@ describe('树测试', () => {
   test('查找id3', () => {
     expect(treeFind(treeDataA, x => x.id === 3 && !x.children)).toHaveProperty('name', '3');
   });
+  test('查找顶层id3', () => {
+    expect(treeFind(treeDataA, (x,y) => x.id === 3 && !y)).toBeUndefined();
+  });
   test('查找id7', () => {
     expect(treeFind(treeDataB, x => x.key === '7', 'list')).toHaveProperty('name', '7');
   })
   test('查找不到', () => {
     expect(treeFind(treeDataB, x => x.key === '8', 'list')).toBeUndefined();
-  })
+  });
 
   test('树遍历', () => {
     expect((() => {
