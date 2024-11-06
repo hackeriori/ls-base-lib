@@ -1,51 +1,45 @@
 import ToResult from "./ToResult";
-import {DefaultGetInfoType, GetInfoType, PassToResultType, ShowMessageType} from "./ToResult/types";
+import {GetInfoType, MasApiType, PassToResultType, ShowMessageType} from "./ToResult/types";
 
-//获取等待后返回值的方法
-export default class To<T extends GetInfoType = DefaultGetInfoType, P extends number = 0> {
+/**
+ * 获取等待后返回值的方法，在构建To实例时，传入getInfoFun处理函数（To设计为类的原因就是方便不同的类实例有自定义的处理函数，这样在请求不同系统接口时很方便处理）
+ * @example
+ * const to = new To(x => {
+ *   if (x.data.code === 200) return x.data.data
+ *   else if (x.data.info) ElMessage.error(x.data.info);
+ * });
+ * @param getInfoFun 解析返回值方法
+ * @param showMessageFun 消息展示方法，如果缺省，使用console.error，它的调用时机为async等待的Promise被拒绝时执行
+ */
+export default class To<T extends GetInfoType = MasApiType, P extends number = 0> {
   //消息展示方法
   readonly showMessage: ShowMessageType;
   //解析返回值方法
   readonly #getInfoFun: T;
 
-  constructor(getInfoFun?: T, showMessageFun?: ShowMessageType) {
-    this.#getInfoFun = getInfoFun || ((data) => data) as T;
+  constructor(getInfoFun: T, showMessageFun?: ShowMessageType) {
+    this.#getInfoFun = getInfoFun;
     if (showMessageFun)
       this.showMessage = showMessageFun;
     else {
-      if ((window as any).ElementPlus) {
-        this.showMessage = (window as any).ElementPlus.ElMessage.error;
-      } else if ((window as any).ELEMENT) {
-        this.showMessage = (window as any).ELEMENT.Message.error;
-      } else
-        this.showMessage = console.error;
+      this.showMessage = (message: string) => {
+        console.error(message)
+      };
     }
   }
 
-  async<R extends Parameters<T>[0]>(promise: Promise<R>, silence = false) {
+  async async<R extends Parameters<T>[0]>(promise: Promise<R>, silence = false) {
     return promise.then(data => new ToResult<PassToResultType<P, R>>(data, undefined, this.#getInfoFun))
       .catch(e => {
         if (!silence) {
-          const messageError = '网络错误';
-          const messageForbidden = "无权访问";
           let message: string;
-          if (e.message === 'Network Error')
-            message = messageError;
-          else if (e.message === 'Request failed with status code 404')
-            message = messageError;
-          else if (e.message === 'Request failed with status code 401')
-            message = messageForbidden;
-          else if (e.message === 'Request failed with status code 403')
-            message = messageForbidden;
-          else if (e.message === 'canceled')
-            message = '';
-          else if (typeof e === 'string')
+          if (typeof e === 'string')
             message = e;
           else if (e.message && typeof e.message === 'string')
             message = e.message;
           else
-            message = '未知错误';
-          message && this.showMessage(message);
+            message = 'unknown error';
+          this.showMessage(message);
         }
         return new ToResult<PassToResultType<P, R>>(undefined, e, this.#getInfoFun);
       });
