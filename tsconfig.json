@@ -11,16 +11,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "dist",
     "lib": [
       "dom"
     ],
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
     "out/**/*.ts"
   ],
   "references": [

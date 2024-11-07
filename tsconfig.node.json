@@ -2,11 +2,12 @@
   "compilerOptions": {
     "composite": true,
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "dist"
   },
   "include": [
-    "vite.config.ts",
-    "jest.config.ts",
-    "build.ts"
+    "vite.config.ts"
   ]
 }

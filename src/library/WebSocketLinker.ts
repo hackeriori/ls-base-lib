@@ -11,7 +11,7 @@ export default class WebSocketLinker<T, U extends boolean> {
   //链接地址
   readonly #url: string;
   //重连句柄
-  #reConnect: NodeJS.Timer | null = null;
+  #reConnect: number | null = null;
   //消息处理函数
   readonly #messageHandler: WSMessageType<string> | WSMessageTypeExt<string, T>;
   //是否解析数据
@@ -30,7 +30,7 @@ export default class WebSocketLinker<T, U extends boolean> {
     this.cancelReConnect();
     this.#reConnect = setInterval(() => {
       this.connect()
-    }, 10000);
+    }, 10000) as any as number;
   }
 
   //连接
