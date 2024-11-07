@@ -1,15 +1,9 @@
 import {describe, expect, test, vi} from 'vitest';
 import To from './index'
 import type {Equal, Expect} from "../../toolTypes";
-import {MasResponseType, MasApiType, PassToResultType, MasAxiosResponseType} from "./ToResult/types";
-import axios from "axios";
-
-type Cases<T> = [
-  // 默认梅安森接口类型
-  Expect<Equal<PassToResultType<0, MasAxiosResponseType<T>>, MasApiType<MasAxiosResponseType<T>>>>,
-  // 返回值类型
-  Expect<Equal<ReturnType<MasApiType<MasAxiosResponseType<T>>>, T | undefined>>,
-]
+import {type MasResponseType} from "./ToResult/types";
+import axios, {type AxiosResponse} from "axios";
+import type ToResult from "./ToResult";
 
 describe('测试To', () => {
   const axiosInstance = axios.create({
@@ -32,6 +26,10 @@ describe('测试To', () => {
       };
     });
     const info = await to.async(axiosInstance.get<MasResponseType<string>>('http://localhost'));
+    type Cases = [
+      Expect<Equal<typeof info, ToResult<AxiosResponse<MasResponseType<string>, any>, string>>>,
+      Expect<Equal<ReturnType<typeof info.getInfo>, string>>
+    ]
     expect(info.getInfo()).toBe('测试成功');
   });
   test('发生错误时，预期的返回值是undefined，并且显示错误方法根据参数调用', async () => {

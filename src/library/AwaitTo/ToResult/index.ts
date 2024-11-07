@@ -1,4 +1,5 @@
-import {GetInfoType} from "./types";
+import {TransFunType} from "./types";
+import type {AxiosResponse} from "axios";
 
 /**
  * 等待后返回此类实例
@@ -6,19 +7,19 @@ import {GetInfoType} from "./types";
  * 如果没有错误发生，getInfo返回处理函数的返回内容
  * 如果有错误发生，getInfo返回undefined
  */
-export default class ToResult<T extends GetInfoType> {
-  readonly #getInfoFun: GetInfoType;
+export default class ToResult<T extends AxiosResponse, R> {
+  readonly #getInfoFun: TransFunType<T>;
   readonly err: any;
-  readonly data: Parameters<T>[0] | undefined;
+  readonly data: T | undefined;
 
-  constructor(_data: Parameters<T>[0] | undefined, _err: any, _getInfoFun: GetInfoType) {
+  constructor(_data: T | undefined, _err: any, _getInfoFun: TransFunType<T>) {
     this.data = _data;
     this.#getInfoFun = _getInfoFun;
     this.err = _err;
   }
 
   // 获取单个异步等待处理结果
-  getInfo(): ReturnType<T> | undefined {
+  getInfo(): R | undefined {
     if (this.data)
       return this.#getInfoFun(this.data);
   }
