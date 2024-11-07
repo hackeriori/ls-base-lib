@@ -1,21 +1,35 @@
 import {describe, expect, test, vi} from 'vitest';
-import To from './index'
+import AxiosTo from './index'
 import type {Equal, Expect} from "../../toolTypes";
 import {type MasResponseType} from "./ToResult/types";
 import axios, {type AxiosResponse} from "axios";
 import type ToResult from "./ToResult";
+import {ShowMessageType, TransFunType} from "../../../dist/src/library/AwaitTo/ToResult/types";
+
+type OtherType<T> = {
+  status: number,
+  response: T,
+  message: string,
+};
+type OtherAxiosResponse<T = unknown> = AxiosResponse<OtherType<T>>;
+type TransOtherFunType<T extends AxiosResponse> = T extends OtherAxiosResponse<infer R> ? R : never
+declare class OtherTo<T extends AxiosResponse = OtherAxiosResponse> {
+  readonly showMessage: ShowMessageType;
+  constructor(getInfoFun: TransFunType<T>, showMessageFun?: ShowMessageType);
+  async<R extends T>(promise: Promise<R>, silence?: boolean): Promise<ToResult<R, TransOtherFunType<R>>>;
+}
 
 describe('测试To', () => {
-  const axiosInstance = axios.create({
-    timeout: 1
-  });
   const showMessageFun = vi.fn();
-  const to = new To(x => {
+  const to = new AxiosTo(x => {
     if (x.data.code === 200) {
       return x.data.data;
     }
   }, showMessageFun);
   test('传入处理方法，getInfo可以按处理方法获得正确的返回值', async () => {
+    const axiosInstance = axios.create({
+      timeout: 1
+    });
     //拦截错误，返回测试值
     axiosInstance.interceptors.response.use(undefined, () => {
       return {
@@ -41,4 +55,29 @@ describe('测试To', () => {
     // 由于使用了silence参数，这里显示错误消息只调用了一次，这次没有调用
     expect(showMessageFun).toBeCalledTimes(1);
   });
+  test('定义一个其他类型，可以使用To', async () => {
+    const axiosInstance = axios.create({
+      timeout: 1
+    });
+    //拦截错误，返回测试值
+    axiosInstance.interceptors.response.use(undefined, () => {
+      return {
+        data: {
+          status: 200,
+          response: '测试成功'
+        }
+      };
+    });
+    const to = new AxiosTo<OtherAxiosResponse>(x => {
+      if (x.data.status === 200) {
+        return x.data.response
+      }
+    }, showMessageFun) as OtherTo;
+    const info = await to.async(axiosInstance.get<OtherType<string>>('http://localhost'));
+    type Cases = [
+      Expect<Equal<typeof info, ToResult<AxiosResponse<OtherType<string>, any>, string>>>,
+      Expect<Equal<ReturnType<typeof info.getInfo>, string>>
+    ]
+    expect(info.getInfo()).toBe('测试成功');
+  })
 });

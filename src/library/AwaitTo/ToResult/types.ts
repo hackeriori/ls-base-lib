@@ -10,9 +10,9 @@ export interface MasResponseType<T> {
 }
 // 消息展示方法类型
 export type ShowMessageType = (message: string) => void;
-// 梅安森axios响应类型
-export type MasAxiosResponseType<T = unknown> = AxiosResponse<MasResponseType<T>>;
 // 转换类型函数类型
 export type TransFunType<T extends AxiosResponse> = (data: T) => any
+// 梅安森axios响应类型
+export type MasAxiosResponseType<T = unknown> = AxiosResponse<MasResponseType<T>>;
 // 转换函数返回类型
-export type TransFunReturnType<T extends AxiosResponse> = T extends MasAxiosResponseType<infer R> ? R : never
+export type TransMasFunType<T extends AxiosResponse> = T extends MasAxiosResponseType<infer R> ? R : never
