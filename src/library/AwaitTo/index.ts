@@ -68,7 +68,7 @@ export default class AxiosTo<T extends AxiosResponse = MasAxiosResponseType> ext
           let message: string;
           if (typeof e === 'string')
             message = e;
-          else if (e.message && typeof e.message === 'string')
+          else if (typeof e.message === 'string')
             message = e.message;
           else
             message = 'unknown error';
