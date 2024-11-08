@@ -5,7 +5,7 @@ export interface MessageEventExt<T, U> extends MessageEvent<T> {
 export type WSMessageTypeExt<T, U> = (ev: MessageEventExt<T, U>) => void;
 export type WSMessageType<T> = (ev: MessageEvent<T>) => void;
 
-export default class WebSocketLinker<T, U extends boolean> {
+export class WebSocketLinker<T, U extends boolean> {
   //WebSocket连接实例
   #ws: WebSocket | null = null;
   //链接地址

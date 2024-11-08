@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite",
     "buildLib": "vue-tsc --noEmit && vite build && esbuild dist/lsBaseLib.es.js --minify --format=esm --allow-overwrite --outfile=dist/lsBaseLib.es.js && vue-tsc --emitDeclarationOnly",
-    "buildHtml": "vite build --config vite.config.html.ts",
+    "buildHtml": "typedoc out/index.ts &&vite build --config vite.config.html.ts",
     "test": "vitest"
   },
   "devDependencies": {
@@ -26,6 +26,7 @@
     "element-plus": "^2.8.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
+    "typedoc": "^0.26.11",
     "typescript": "^5.6.3",
     "unplugin-auto-import": "^0.18.3",
     "unplugin-vue-components": "^0.27.4",

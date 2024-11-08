@@ -9,7 +9,7 @@ import {
 import {getParamName, getTypeName, verifiers} from "./verifiers";
 
 //注意由于没有使用反射Reflect，所以一个类需要new一个Verify以确保名称不重复。
-export default class Verify {
+export class Verify {
   #funMap = new Map<MethodKeyType, ParameterVerifyMapType>();
 
   //参数验证

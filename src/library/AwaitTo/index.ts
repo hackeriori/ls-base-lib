@@ -43,7 +43,7 @@ import {EventDispatcher} from "../EventDispatcher";
  * @param getInfoFun 解析返回值方法
  * @param showMessageFun 消息展示方法，如果缺省，使用console.error，它的调用时机为async等待的Promise被拒绝时执行
  */
-export default class AxiosTo<T extends AxiosResponse = MasAxiosResponseType> extends EventDispatcher<AwaitToEventMap> {
+export class AxiosTo<T extends AxiosResponse = MasAxiosResponseType> extends EventDispatcher<AwaitToEventMap> {
   // 解析Promise返回值方法
   readonly #getInfoFun: TransFunType<T>;
   // 判断返回值是否成功的方法（业务层面）
