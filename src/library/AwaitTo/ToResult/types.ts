@@ -1,4 +1,12 @@
 import type {AxiosResponse} from "axios";
+
+// AwaitTo事件类型
+export interface AwaitToEventMap {
+  error: {
+    error: any
+  }
+}
+
 // 梅安森响应体类型
 export interface MasResponseType<T> {
   // 状态码
@@ -8,8 +16,9 @@ export interface MasResponseType<T> {
   // 数据
   data: T,
 }
-// 消息展示方法类型
-export type ShowMessageType = (message: string) => void;
+
+// 判断返回值是否成功（业务层面）的方法类型
+export type IsSuccessType<T extends AxiosResponse> = (data: T) => boolean;
 // 转换类型函数类型
 export type TransFunType<T extends AxiosResponse> = (data: T) => any
 // 梅安森axios响应类型
