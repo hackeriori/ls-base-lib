@@ -46,15 +46,15 @@ export type EventListener<TEventData, TEventType extends string, TTarget> = (
  * ```
  * @see {@link https://github.com/mrdoob/eventdispatcher.js mrdoob EventDispatcher on GitHub}
  */
-class EventDispatcher<TEventMap extends Record<string, unknown> = {}> {
-  #listeners: Record<string, EventListener<TEventMap[T], T, this>[]>
+class EventDispatcher<TEventMap extends {} = {}> {
+  #listeners?: Record<string, EventListener<any, any, this>[]>
 
   /**
    * 添加一个监听器到某个事件类型
    * @param type 事件类型
    * @param listener 监听器，一个回调函数
    */
-  addEventListener<T extends keyof TEventMap>(type: T, listener: EventListener<TEventMap[T], T, this>) {
+  addEventListener<T extends Extract<keyof TEventMap, string>>(type: T, listener: EventListener<TEventMap[T], T, this>) {
     if (this.#listeners === undefined) this.#listeners = {};
     if (this.#listeners[type] === undefined) {
       this.#listeners[type] = [];
@@ -69,7 +69,7 @@ class EventDispatcher<TEventMap extends Record<string, unknown> = {}> {
    * @param type 事件类型
    * @param listener 监听器，一个回调函数
    */
-  hasEventListener<T extends keyof TEventMap>(type: T, listener: EventListener<TEventMap[T], T, this>) {
+  hasEventListener<T extends Extract<keyof TEventMap, string>>(type: T, listener: EventListener<TEventMap[T], T, this>) {
     if (this.#listeners === undefined) return false;
     return this.#listeners[type] !== undefined && this.#listeners[type].indexOf(listener) !== -1;
   }
@@ -79,7 +79,7 @@ class EventDispatcher<TEventMap extends Record<string, unknown> = {}> {
    * @param type 事件类型
    * @param listener 监听器，一个回调函数
    */
-  removeEventListener<T extends keyof TEventMap>(type: T, listener: EventListener<{}, T, this>) {
+  removeEventListener<T extends Extract<keyof TEventMap, string>>(type: T, listener: EventListener<{}, T, this>) {
     if (this.#listeners === undefined) return;
     const listenerArray = this.#listeners[type];
     if (listenerArray !== undefined) {
@@ -94,15 +94,19 @@ class EventDispatcher<TEventMap extends Record<string, unknown> = {}> {
    * 触发一个事件
    * @param event 待触发的事件
    */
-  dispatchEvent<T extends keyof TEventMap>(event: BaseEvent<T> & TEventMap[T]) {
+  dispatchEvent<T extends Extract<keyof TEventMap, string>>(event: BaseEvent<T> & TEventMap[T]) {
     if (this.#listeners === undefined) return;
     const listenerArray = this.#listeners[event.type];
     if (listenerArray !== undefined) {
-      event.target = this;
+      Object.defineProperty(event, 'target', {
+        configurable: true,
+        enumerable: true,
+        value: this,
+      })
       // 复制一份，以防迭代时被外部移除。.
       const array = listenerArray.slice(0);
       for (let i = 0, l = array.length; i < l; i++) {
-        array[i].call(this, event);
+        array[i].call(this, event as TEventMap[T] & Event<T, this>);
       }
     }
   }
