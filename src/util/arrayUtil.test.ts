@@ -18,6 +18,12 @@ describe("数组移除测试", () => {
     }
     expect(arr2.length).toBe(0);
   })
+  test("空数组时，移除不会报错",()=>{
+    expect(()=>arrRemove([],0)).not.toThrow();
+  })
+  test("下标错误时，移除不会报错",()=>{
+    expect(()=>arrRemove([1],1)).not.toThrow();
+  })
 })
 
 describe('数组分组测试', () => {
