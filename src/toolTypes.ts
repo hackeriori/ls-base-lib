@@ -1,11 +1,9 @@
-// 断言类型为真
+// 断言T类型为真
 export type Expect<T extends true> = T
-// 判断两种类型是否相等
+// 判断输入的两种类型是否相等
 export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends (<T>() => T extends Y ? 1 : 2) ? true : false
-// 返回类的构造函数的参数类型
-export type ConstructorArgsType<T> = T extends new(...args: infer A) => any ? A : never;
-// 调试一种类型
-export type Debug<T> = { [K in keyof T]: T[K] }
+// 调试一种类型，通常用于将某种推断类型具体化
+export type Debug<T> = {[K in keyof T]: T[K]}
 
 /*
 参考https://www.npmjs.com/package/@type-challenges/utils这个库
