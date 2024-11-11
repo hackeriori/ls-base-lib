@@ -7,7 +7,12 @@ export interface AwaitToEventMap {
   }
 }
 
-// 梅安森响应体类型
+/**
+ * 梅安森响应体类型
+ * @property code 状态码
+ * @property info 信息
+ * @property data 数据
+ */
 export interface MasResponseType<T> {
   // 状态码
   code: number,

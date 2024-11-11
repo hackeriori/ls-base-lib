@@ -25,5 +25,12 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": [
+      "out/index.ts",
+      "out/declaration.ts"
+    ],
+    "out": "docs"
+  }
 }

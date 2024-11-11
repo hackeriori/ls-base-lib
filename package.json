@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite",
     "buildLib": "vue-tsc --noEmit && vite build && esbuild dist/lsBaseLib.es.js --minify --format=esm --allow-overwrite --outfile=dist/lsBaseLib.es.js && vue-tsc --emitDeclarationOnly",
-    "buildHtml": "typedoc out/index.ts &&vite build --config vite.config.html.ts",
+    "buildHtml": "typedoc && vite build --config vite.config.html.ts",
     "test": "vitest"
   },
   "devDependencies": {
