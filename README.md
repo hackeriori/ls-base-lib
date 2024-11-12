@@ -9,5 +9,6 @@ $ npm install ls-base-lib
 ```
 
 ## instructions 使用说明
-[APIs](https://hackeriori.github.io/ls-base-lib/)  
+[APIs](https://hackeriori.github.io/ls-base-lib/modules/index.html)  
+  
 [Demos 部分示例代码](https://hackeriori.github.io/ls-base-lib/demo/)

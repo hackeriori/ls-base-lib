@@ -1,10 +1,10 @@
 import {describe, expect, test, vi} from 'vitest';
-import AxiosTo from './index'
+import {AxiosTo} from './index'
 import type {Equal, Expect} from "../../toolTypes";
 import {IsSuccessType, type MasAxiosResponseType, type MasResponseType} from "./ToResult/types";
 import axios, {type AxiosResponse} from "axios";
-import type ToResult from "./ToResult";
-import {ShowMessageType, TransFunType} from "../../../dist/src/library/AwaitTo/ToResult/types";
+import type {ToResult} from "./ToResult";
+import {TransFunType} from "../../../dist/src/library/AwaitTo/ToResult/types";
 
 type OtherType<T> = {
   status: number,
@@ -15,7 +15,7 @@ type OtherAxiosResponse<T = unknown> = AxiosResponse<OtherType<T>>;
 type TransOtherFunType<T extends AxiosResponse> = T extends OtherAxiosResponse<infer R> ? R : never
 
 declare class OtherTo<T extends AxiosResponse = OtherAxiosResponse> {
-  showMessage: ShowMessageType;
+  showMessage: (message: string) => void;
 
   constructor(getInfoFun: TransFunType<T>, isSuccessFun: IsSuccessType<T>);
 
@@ -67,7 +67,7 @@ describe('测试To', () => {
     expect(errorHandler).toBeCalledWith({
       "error": "发生错误",
       "target": to,
-      "type": "error",
+      "type": "error"
     })
     await to.async(Promise.reject('发生错误'), true);
     // 由于使用了silence参数，这里显示错误消息只调用了一次，这次没有调用
@@ -76,6 +76,7 @@ describe('测试To', () => {
   });
   test('定义一个其他类型，可以使用To', async () => {
     const showOtherMessageFun = vi.fn();
+
     function isOtherSuccess(x: OtherAxiosResponse) {
       return x.data.status === 200;
     }
