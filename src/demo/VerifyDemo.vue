@@ -124,7 +124,7 @@ function orderTest() &#123;
 
 <script setup lang="ts">
 import ExampleBox from "../components/exampleBox/ExampleBox.vue";
-import {Verify} from "../library/verify/Verify";
+import {Verify} from "../library/Verify";
 import {ref} from "vue";
 
 const message = ref('');

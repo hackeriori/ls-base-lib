@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import Verify from "./Verify";
+import {Verify} from "./index";
 
 describe('验证测试', () => {
   const v = new Verify();
