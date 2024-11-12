@@ -1,22 +1,30 @@
-import {
-  MethodKeyType,
-  ParameterCacheType,
-  ParameterVerifyType,
-  VerifyFactorType,
-  VerifyFunType,
-  VerifyNameType
-} from "./types";
+import {ParameterCacheType, ParameterVerifyType, VerifyFactorType, VerifyFunType, VerifyNameType} from "./types";
 
-function getMethodName(target: any, propertyKey: MethodKeyType) {
-  //当直接使用类本身时，类本身是Function
+/**
+ * 获取方法名称
+ * @param target
+ * @param propertyKey
+ */
+function getMethodName(target: any, propertyKey: PropertyKey) {
+  // 当直接使用类本身时，类本身是Function
   const className = typeof target === 'object' ? target.constructor.name : target.name;
   return `${className}类中的${propertyKey.toString()}方法中：`;
 }
 
-export function getParamName(target: any, propertyKey: MethodKeyType, paramIndex: number) {
+/**
+ * 获取参数名称，打包后参数名称会被压缩
+ * @param target
+ * @param propertyKey
+ * @param paramIndex
+ */
+export function getParamName(target: any, propertyKey: PropertyKey, paramIndex: number) {
   return (target[propertyKey].toString() as string).match(/\(.*\)/)![0].slice(1, -1).replace(/\/\*.*\*\//, "").split(',')[paramIndex].trim();
 }
 
+/**
+ * 获取验证类型的名称
+ * @param type
+ */
 export function getTypeName(type: ParameterVerifyType): VerifyNameType {
   return Array.isArray(type) ? type[0] : type;
 }

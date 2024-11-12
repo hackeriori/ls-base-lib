@@ -8,6 +8,7 @@ import {EventDispatcher} from "../EventDispatcher";
 /**
  * {@link https://www.npmjs.com/package/axios axios}通过get、post等方法获取数据后，返回Promise，此类等待并获取Promise的结果。
  * @example
+ * ```typescript
  * function isSuccess(x: MasAxiosResponseType) {
  *   return x.data.code === 200;
  * }
@@ -17,7 +18,9 @@ import {EventDispatcher} from "../EventDispatcher";
  *   else if (x.data.info) ElMessage.error(x.data.info);
  * }, isSuccess);
  * to.showMessage = (message: string) => ElMessage.error(message);
+ * ```
  * @example
+ * ```typescript
  * // 如果有其他的返回类型，可以参考以下方法进行扩展，方便对接多个系统
  * type OtherType<T> = {
  *   status: number,
@@ -42,6 +45,7 @@ import {EventDispatcher} from "../EventDispatcher";
  *   }
  * },isSuccess) as OtherTo;
  * to.showMessage = (message: string) => ElMessage.error(message);
+ * ```
  */
 export class AxiosTo<T extends AxiosResponse = MasAxiosResponseType> extends EventDispatcher<AwaitToEventMap> {
   /** 解析Promise返回值的方法 */
