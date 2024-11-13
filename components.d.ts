@@ -13,5 +13,6 @@ declare module 'vue' {
     ExampleBox: typeof import('./src/components/exampleBox/ExampleBox.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VuePlayground: typeof import('./src/components/vuePlayground/VuePlayground.vue')['default']
   }
 }
