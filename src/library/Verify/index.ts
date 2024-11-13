@@ -32,7 +32,7 @@ export class Verify {
   #funMap = new Map<PropertyKey, ParameterVerifyMapType>();
 
   /**
-   * 标记一个参数需要验证，参数为验证规则，可以传递多个规则，它们将按参数顺序依次进行验证，一旦某个规则不通过则立即抛出错误，后面的验证规则将不参与验证，且函数体不会执行。
+   * 标记一个参数需要验证，参数为{@link ParameterVerifyType 验证规则}，可以传递多个规则，它们将按参数顺序依次进行验证，一旦某个规则不通过则立即抛出错误，后面的验证规则将不参与验证，且函数体不会执行。
    * 与{@link Verify#fun}配合使用，单独使用没有效果
    * @example
    * ```

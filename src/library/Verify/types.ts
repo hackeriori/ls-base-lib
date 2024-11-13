@@ -24,7 +24,7 @@ export type VerifyCustomType = (value: any) => boolean;
  * ParameterSimpleType 简单参数验证类型<br/>
  * ['instanceof', Function] instanceof验证，验证参数继承自某个类<br/>
  * ['custom', VerifyCustomType] 自定义验证，传入自定义验证方法<br/>
- * ['custom', VerifyCustomType, string] 自定义验证，传入自定义验证方法和自定义出错信息
+ * ['custom', VerifyCustomType, string] 自定义验证，传入自定义验证方法和自定义错误信息
  */
 export type ParameterVerifyType =
   ParameterSimpleType
