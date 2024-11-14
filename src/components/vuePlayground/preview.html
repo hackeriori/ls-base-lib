@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>preview</title>
+  <style>
+    html, body, #app {
+      margin: 0;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3.5.12/dist/vue.esm-browser.js"
+    }
+  }
+</script>
+<script>
+  // 通过 message 传递需要执行的代码
+  window.addEventListener("message", ({data}) => {
+    const {type, code} = data;
+    if (type === "eval") {
+      handleEval(code);
+    }
+  });
+
+  let scriptElement = null;
+
+  // 处理需要执行的代码
+  function handleEval(code) {
+    // 移除历史脚本
+    if (scriptElement) {
+      scriptElement.remove();
+    }
+    // 创建新的脚本元素
+    scriptElement = document.createElement("script");
+    scriptElement.setAttribute("type", "module");
+    scriptElement.innerHTML = code;
+    // 插入到 body 中。
+    document.body.appendChild(scriptElement);
+  }
+</script>
+</body>
+</html>

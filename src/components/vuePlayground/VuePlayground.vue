@@ -4,14 +4,46 @@ import {EditorState} from '@codemirror/state';
 import {EditorView, basicSetup} from 'codemirror';
 import {vue} from '@codemirror/lang-vue';
 import {parse, compileScript, compileTemplate, compileStyle} from "vue/compiler-sfc";
+import {transpileModule} from 'typescript';
+import PreviewTemplate from "./preview.html?raw";
 
 const props = defineProps<{
   code: string
 }>();
 const editorRef = shallowRef();
-let code = props.code;
+const previewRef = shallowRef();
+let iFrame: HTMLIFrameElement | null = null;
+let sourceCode = '';
 
-function compile(code) {
+/**
+ * 创建沙盒
+ */
+function createSandbox() {
+  const template = document.createElement("iframe");
+  template.setAttribute("style", "width: 100%;height: 100%;border: none");
+  template.srcdoc = PreviewTemplate;
+  previewRef.value.appendChild(template);
+  return template;
+}
+
+/**
+ * 处理编辑器代码
+ * @param code
+ */
+function dealCode(code: string) {
+  if (!code?.trim()) return;
+  const compiledCode = compile(code);
+  iFrame?.contentWindow.postMessage(
+    {type: "eval", code: compiledCode},
+    "*"
+  );
+}
+
+/**
+ * 编译代码
+ * @param code
+ */
+function compile(code: string) {
   const {descriptor} = parse(code);
   let _code = `
     if(window.__app__){
@@ -26,7 +58,16 @@ function compile(code) {
       inlineTemplate: true,
       id: descriptor.filename
     });
-    _code += script.content.replace(
+    let jsScript: string;
+    if (script.lang === 'ts')
+      jsScript = transpileModule(script.content, {
+        compilerOptions: {
+          module: 99
+        }
+      }).outputText;
+    else
+      jsScript = script.content;
+    _code += jsScript.replace(
       "export default",
       `window.${componentName} =`
     );
@@ -49,7 +90,11 @@ function compile(code) {
       import { createApp } from "vue";
 
       window.__app__ = createApp(window.${componentName});
-      window.__app__.mount("#app");
+      try{
+        window.__app__.mount("#app");
+      }catch(e){
+        document.getElementById("app").innerHTML = e;
+      }
 
       if (window.__style__) {
         window.__style__.remove();
@@ -77,32 +122,46 @@ function compile(code) {
 }
 
 onMounted(() => {
-  const state = EditorState.create({
-    doc: code,
-    extensions: [
-      basicSetup,
-      vue(),
-      EditorView.updateListener.of((update) => {
-        if (update.changes) {
-          code = editorView.state.doc.toString();
-        }
-      })
-    ]
-  });
-
-  const editorView = new EditorView({
-    state,
+  new EditorView({
+    state: EditorState.create({
+      doc: props.code,
+      extensions: [
+        basicSetup,
+        vue(),
+        EditorView.updateListener.of((update) => {
+          if (update.changes) {
+            // 即使获取焦点，这个事件也会多次触发，需要缓存以节流
+            const newCode = update.state.doc.toString();
+            if (sourceCode !== newCode) {
+              sourceCode = newCode;
+              dealCode(newCode);
+            }
+          }
+        })
+      ]
+    }),
     parent: editorRef.value
   });
+  iFrame = createSandbox();
 })
 </script>
 
 <template>
-  <el-scrollbar>
-    <div ref="editorRef"></div>
-  </el-scrollbar>
+  <div class="height100 ls-flex ls-flex-unShrink">
+    <div class="ls-flex-subItem-grow">
+      <el-scrollbar>
+        <div ref="editorRef"></div>
+      </el-scrollbar>
+    </div>
+    <div class="splitLine"></div>
+    <div class="height100 ls-flex-subItem-grow" ref="previewRef"></div>
+  </div>
+
 </template>
 
 <style scoped>
-
+.splitLine{
+  border-left: 1px solid #222;
+  margin: 0 6px;
+}
 </style>
