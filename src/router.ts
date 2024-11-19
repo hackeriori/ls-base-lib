@@ -27,8 +27,8 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/VerifyDemo',
-    name: '验证装饰器',
-    component: () => import('./demo/VerifyDemo.vue'),
+    name: '验证装饰器Demo',
+    component: () => import('./demo/verifyDemo/VerifyDemo.vue'),
   },
   {
     path: '/HeavyTaskBreakdown',

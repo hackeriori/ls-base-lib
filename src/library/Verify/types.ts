@@ -27,10 +27,10 @@ export type VerifyCustomType = (value: any) => boolean;
  * ['custom', VerifyCustomType, string] 自定义验证，传入自定义验证方法和自定义错误信息
  */
 export type ParameterVerifyType =
-  ParameterSimpleType
-  | ['instanceof', Function]
-  | ['custom', VerifyCustomType]
-  | ['custom', VerifyCustomType, string];
+  ParameterSimpleType | AddQuestionMark<Exclude<ParameterSimpleType, 'required'>>
+  | ['instanceof', Function] | ['?instanceof', Function]
+  | ['custom', VerifyCustomType] | ['?custom', VerifyCustomType]
+  | ['custom', VerifyCustomType, string] | ['?custom', VerifyCustomType, string];
 
 /** 验证工厂的返回函数类型 */
 export type VerifyFunType = (paramIndexList: ParameterCacheType[], target: Object, propertyKey: PropertyKey, argumentList: IArguments) => void
@@ -38,8 +38,14 @@ export type VerifyFunType = (paramIndexList: ParameterCacheType[], target: Objec
 /** 验证工厂验证参数方法类型 */
 export type VerifyFactorType = (value: any, paramIndex: ParameterCacheType) => boolean;
 
+/** 添加可选的简单类型 */
+export type AddQuestionMark<T extends string> = `?${T}`;
+
+/** 参数缓存名称简单类型 */
+export type VerifyNameSimpleType = ParameterSimpleType | 'instanceof' | 'custom';
+
 /** 参数缓存名称类型 */
-export type VerifyNameType = ParameterSimpleType | 'instanceof' | 'custom';
+export type VerifyNameType = VerifyNameSimpleType | AddQuestionMark<Exclude<VerifyNameSimpleType, 'required'>>
 
 /** 参数缓存值类型 */
 export interface ParameterCacheType {

@@ -9,28 +9,17 @@
       margin: 0;
       height: 100%;
     }
+    #app {
+      font-size: 14px;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
 <div id="app"></div>
 <script type="importmap">
-  {
-    "imports": {
-      "vue": "https://unpkg.com/vue@3.5.12/dist/vue.esm-browser.js"
-    }
-  }
 </script>
 <script>
-  // 通过 message 传递需要执行的代码
-  window.addEventListener("message", ({data}) => {
-    const {type, code} = data;
-    if (type === "eval") {
-      handleEval(code);
-    }
-  });
-
-  let scriptElement = null;
-
   // 处理需要执行的代码
   function handleEval(code) {
     // 移除历史脚本
@@ -44,6 +33,16 @@
     // 插入到 body 中。
     document.body.appendChild(scriptElement);
   }
+
+  let scriptElement = null;
+  // 通过 message 传递需要执行的代码
+  window.addEventListener("message", ({data}) => {
+    const {type, code} = data;
+    if (type === "eval") {
+      handleEval(code);
+    }
+  });
+  parent.postMessage({type: "preViewReady", data: messageFlog}, "*")
 </script>
 </body>
 </html>

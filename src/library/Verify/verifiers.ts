@@ -89,3 +89,42 @@ verifiers.set('instanceof', verifyParamFactory((x, i) => x instanceof i.instance
 
 //custom验证
 verifiers.set('custom', verifyParamFactory((x, i) => i.custom!(x), i => i.customText || '自定义校验失败'));
+
+//可选的数字类型验证
+verifiers.set('?number', verifyParamFactory(x => x === undefined || Number.isFinite(x), '必须是数字或者不传'));
+
+//可选的字符串类型验证
+verifiers.set('?string', verifyParamFactory(x => x === undefined || typeof x === 'string', '必须是字符串或者不传'));
+
+//可选的布尔类型验证
+verifiers.set('?boolean', verifyParamFactory(x => x === undefined || x === true || x === false, '必须是布尔值或者不传'));
+
+//可选的函数验证
+verifiers.set('?function', verifyParamFactory(x => x === undefined || typeof x === 'function', '必须是函数或者不传'));
+
+//可选的数组验证
+verifiers.set('?array', verifyParamFactory(x => x === undefined || Array.isArray(x), '必须是数组或者不传'));
+
+//可选的日期验证
+verifiers.set('?date', verifyParamFactory(x => x === undefined || (x instanceof Date && !isNaN(x.valueOf())), '必须是日期或者不传'));
+
+//可选的dom验证
+verifiers.set('?dom', verifyParamFactory(x => x === undefined || x instanceof HTMLElement, '必须是HTMLElement或者不传'));
+
+//可选的map验证
+verifiers.set('?map', verifyParamFactory(x => x === undefined || x instanceof Map, '必须是Map类型或者不传'));
+
+//可选的正则表达式验证
+verifiers.set('?regExp', verifyParamFactory(x => x === undefined || x instanceof RegExp, '必须是正则表达式或者不传'));
+
+//可选的symbol验证
+verifiers.set('?symbol', verifyParamFactory(x => x === undefined || typeof x === 'symbol', '必须是Symbol或者不传'));
+
+//可选的异步函数验证
+verifiers.set('?asyncFunction', verifyParamFactory(x => x === undefined || (typeof x === 'function' && x.constructor.name === 'AsyncFunction'), '必须是异步函数或者不传'));
+
+//可选的instanceof验证
+verifiers.set('?instanceof', verifyParamFactory((x, i) => x === undefined || x instanceof i.instance!, i => `必须是[${i.instance!.name}]的实例类型或者不传`));
+
+//可选的custom验证
+verifiers.set('?custom', verifyParamFactory((x, i) => x === undefined || i.custom!(x), i => i.customText || '自定义校验失败或者不传'));

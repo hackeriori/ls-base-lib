@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import {onMounted, shallowRef} from 'vue';
 import {EditorState} from '@codemirror/state';
-import {EditorView, basicSetup} from 'codemirror';
+import {basicSetup, EditorView} from 'codemirror';
 import {vue} from '@codemirror/lang-vue';
-import {parse, compileScript, compileTemplate, compileStyle} from "vue/compiler-sfc";
+import {compileScript, compileStyle, compileTemplate, parse} from "vue/compiler-sfc";
 import {transpileModule} from 'typescript';
-import PreviewTemplate from "./preview.html?raw";
+import previewTemplate from "./preview.html?raw";
+import {strInsertAt} from '../../util/stringUtil';
 
 const props = defineProps<{
-  code: string
+  code: string,
+  importMap?: Record<string, string>
 }>();
 const editorRef = shallowRef();
 const previewRef = shallowRef();
 let iFrame: HTMLIFrameElement | null = null;
 let sourceCode = '';
+let messageFlag = Math.random();
 
 /**
  * 创建沙盒
@@ -21,7 +24,23 @@ let sourceCode = '';
 function createSandbox() {
   const template = document.createElement("iframe");
   template.setAttribute("style", "width: 100%;height: 100%;border: none");
-  template.srcdoc = PreviewTemplate;
+  // 插入通信通道号
+  const temp = strInsertAt(previewTemplate, previewTemplate.indexOf('<script type="importmap">') + 36, `
+\<script\>
+const messageFlog = ${messageFlag};
+\<\/script\>
+`);
+  // 找到模块的位置并加入自定义模块
+  const modules: string [] = ['"vue": "https://unpkg.com/vue@3.5.12/dist/vue.esm-browser.js"'];
+  if (props.importMap)
+    for (const key in props.importMap) {
+      modules.push(`"${key}": "${props.importMap[key]}"`);
+    }
+  template.srcdoc = strInsertAt(temp, temp.indexOf('<script type="importmap">') + 25, `{
+    "imports": {
+      ${modules.join(',\n')}
+    }
+  }`);
   previewRef.value.appendChild(template);
   return template;
 }
@@ -33,10 +52,7 @@ function createSandbox() {
 function dealCode(code: string) {
   if (!code?.trim()) return;
   const compiledCode = compile(code);
-  iFrame?.contentWindow.postMessage(
-    {type: "eval", code: compiledCode},
-    "*"
-  );
+  iFrame?.contentWindow.postMessage({type: "eval", code: compiledCode}, "*");
 }
 
 /**
@@ -62,15 +78,13 @@ function compile(code: string) {
     if (script.lang === 'ts')
       jsScript = transpileModule(script.content, {
         compilerOptions: {
-          module: 99
+          module: 99,
+          experimentalDecorators: true
         }
       }).outputText;
     else
       jsScript = script.content;
-    _code += jsScript.replace(
-      "export default",
-      `window.${componentName} =`
-    );
+    _code += jsScript.replace("export default", `window.${componentName} =`);
   }
   // 非 setup 模式下，需要编译 template。
   if (!descriptor.scriptSetup && descriptor.template) {
@@ -79,12 +93,8 @@ function compile(code: string) {
       filename: descriptor.filename,
       id: descriptor.filename
     });
-    _code = _code + ";" + template.code.replace(
-      "export function",
-      `window.${componentName}.render = function`
-    );
+    _code = _code + ";" + template.code.replace("export function", `window.${componentName}.render = function`);
   }
-
   // 创建 vue app 实例并渲染。
   _code += `;
       import { createApp } from "vue";
@@ -94,13 +104,13 @@ function compile(code: string) {
         window.__app__.mount("#app");
       }catch(e){
         document.getElementById("app").innerHTML = e;
+        throw e;
       }
 
       if (window.__style__) {
         window.__style__.remove();
       }
     `;
-
   // 编译 css 样式。
   if (descriptor.styles?.length) {
     const styles = descriptor.styles.map((style) => {
@@ -110,16 +120,24 @@ function compile(code: string) {
         id: descriptor.filename
       }).code;
     });
-
     _code += `
       window.__style__ = document.createElement("style");
       window.__style__.innerHTML = ${JSON.stringify(styles.join(""))};
       document.body.appendChild(window.__style__);
       `;
   }
-
   return _code;
 }
+
+function preViewReady(ev: MessageEvent) {
+  if (ev.data.type === 'preViewReady' && ev.data.data === messageFlag) {
+    sourceCode = props.code;
+    dealCode(sourceCode);
+    window.removeEventListener('message', preViewReady);
+  }
+}
+
+window.addEventListener('message', preViewReady);
 
 onMounted(() => {
   new EditorView({
@@ -134,7 +152,7 @@ onMounted(() => {
             const newCode = update.state.doc.toString();
             if (sourceCode !== newCode) {
               sourceCode = newCode;
-              dealCode(newCode);
+              dealCode(sourceCode);
             }
           }
         })
@@ -160,7 +178,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.splitLine{
+.splitLine {
   border-left: 1px solid #222;
   margin: 0 6px;
 }
