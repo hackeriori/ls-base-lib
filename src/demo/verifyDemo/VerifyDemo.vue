@@ -3,59 +3,95 @@
     <el-scrollbar>
       <h1>验证类Verify</h1>
       <h3>背景环境</h3>
-      <div>当你使用ts完成一个类库后，如何确保在js环境也获得类型一致性体验</div>
-      <div>你是否经常处理客户的报错信息，排查下来是因为调用你类库的传参错误而你没有判断</div>
-      <div>考虑如下示例</div>
-      <pre>class testClass{
-  testFun(a:number, b:number){
-    return a * b;
-  }
-}</pre>
-      <div>在ts环境内使用这个类库，不必考虑a和b的类型，因为编译器会强制它们为数字类型，否则无法通过编译</div>
-      <div>但是，在js环境，我们不得不为类库添加对应的校验代码以防止后面的代码运行出错</div>
-      <div>如何有效管理参数验证以创建一个稳定运行的类库，你可以考虑使用Verify类</div>
-      <h3>使用基础</h3>
-      <ul>
-        <li>
-          Verify为运行时验证，使用场景是构建稳健的第三方类库，为类方法的参数提供系列验证（因为你无法保证使用类库的环境为ts，此时编译时的类型验证就失效了）
-        </li>
-        <li>Verify被设计成类而没有设计成单独的方法，是因为使用了类的私有属性作为Map来存储规则，而没有使用反射Reflect</li>
-        <li>验证方法均使用esnext语法，需要兼容老旧浏览器的请考虑babel第三方库或打全局补丁</li>
-        <li>在生产环境，因为代码压缩，错误提示的参数名会发生变化（变为压缩后的名称），但是第N个参数仍然准确</li>
-      </ul>
-      <h3>Verify类型</h3>
-      <ul>
-        <li><a href="/ls-base-lib/classes/index.Verify.html">Class Verify</a></li>
-      </ul>
-      <div>布尔判断并非使用真值或者假值判断，而使用严格相等判断是否为true或false</div>
-      <div>
-        由于对象类型（数组是对象，日期也是对象）在js中是广义的，简单的判断对象类型并不能有效约束参数，暂时不将它添加到基础的验证类型，请考虑类instanceof验证和custom验证
+      <div>当你使用ts完成一个类库后，如何确保在js环境也获得类型校验的功能？考虑如下示例：</div>
+      <div style="display: flex">
+        <div ref="editorRef1" style="margin-right: 1em"></div>
+        <div ref="editorRef2"></div>
       </div>
+      <div>Verify帮助我们将验证提前到参数定义阶段，省去函数体内验证代码，函数体内写函数本身要实现的功能即可。</div>
+      <h3>类型定义</h3>
+      请移步类型定义页关于<a href="/ls-base-lib/classes/index.Verify.html">Verify</a>部分
       <h3>验证规则</h3>
       <ul>
         <li>参数验证失败，将直接抛出异常，不会执行方法体。</li>
-        <li>在没有参数时（即参数不传的情况下）不会执行参数验证（required除外），传了参数，即使传的undefined，也会参与验证，除非你使用可选参数</li>
         <li>
-          在有多个验证条件的情况下，按从左到右的顺序依次验证，一旦失败将跳过后面的验证。也就是说，可以把基础验证写在前面，这样自定义验证的验证内容就可以不用再去写基础验证的相关内容了
+          同一个参数，在有多个验证条件的情况下，按从左到右的顺序依次验证，一旦失败将跳过后面的验证。也就是说，可以把基础验证写在前面，这样自定义验证的验证内容就可以省去基础验证内容了。
         </li>
         <li>
-          不要写自相矛盾的验证规则，例如('number','string')，因为不存在既是数字，又是字符串的变量，这样验证必然会抛出错误。
+          不要写自相矛盾的验证规则，例如param('number','string')，因为不存在既是数字，又是字符串的值，这样验证必然会抛出错误。
         </li>
       </ul>
       <h3>验证示例</h3>
-      <h4>必要性和数字类型验证</h4>
-      <VuePlayground :code="RequiredTest" :import-map="importMap" style="height: 250px"></VuePlayground>
+      <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected">
+        <option v-for="item in examples" :value="item.index">{{ item.title }}</option>
+      </select>
+      <VuePlayground v-if="exampleCode" :code="exampleCode" :import-map="importMap" style="height: 250px"></VuePlayground>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
 import VuePlayground from '../../components/vuePlayground/VuePlayground.vue';
-import RequiredTest from './BaseVerifyTest.vue?raw';
+import {onMounted, ref, shallowRef} from 'vue';
+import {basicSetup, EditorView} from 'codemirror';
+import {EditorState} from '@codemirror/state';
+import {javascript} from '@codemirror/lang-javascript';
 
+const editorRef1 = shallowRef();
+const editorRef2 = shallowRef();
 const importMap = {
   'ls-base-lib': './lsBaseLib.es.js'
 };
+const examples = [
+  {index: 1, title: '必要性和数字类型验证', code: import('./NumberVerifyTest.vue?raw')},
+  {index: 2, title: '字符串可选类型验证', code: import('./StringVerifyTest.vue?raw')}
+]
+const exampleIndex = ref(1);
+const exampleCode = shallowRef('');
+
+async function exampleSelected() {
+  const codePromise = examples.find(item => item.index === exampleIndex.value).code;
+  exampleCode.value = (await codePromise).default;
+}
+
+exampleSelected();
+
+onMounted(() => {
+  new EditorView({
+    state: EditorState.create({
+      doc: `// 使用代码验证，在函数体内实现验证逻辑
+class testClass{
+  twoNumberAddTestFun(a:number, b:number){
+    if(!Number.isFinite(a) || !Number.isFinite(b))
+      throw new Error('a and b must be number');
+    return a * b;
+  }
+}`,
+      extensions: [
+        basicSetup,
+        javascript()
+      ]
+    }),
+    parent: editorRef1.value
+  });
+  new EditorView({
+    state: EditorState.create({
+      doc: `// 使用Verify验证，定义参数时验证即完成
+const v = new Verify();
+class testClass{
+  @v.fun()
+  twoNumberAddTestFun(@v.param('required', 'number') a: number, @v.param('required', 'number') b: number){
+    return a * b;
+  }
+}`,
+      extensions: [
+        basicSetup,
+        javascript()
+      ]
+    }),
+    parent: editorRef2.value
+  });
+})
 </script>
 
 <style scoped>

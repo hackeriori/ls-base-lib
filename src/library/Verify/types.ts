@@ -1,13 +1,13 @@
 /**
  * 简单参数验证类型<br/>
  * required 参数是必选的<br/>
- * number 参数必须是数字<br/>
+ * number 参数必须是{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite 有限数}<br/>
  * string 参数必须是字符串<br/>
- * boolean 参数必须是布尔值<br/>
+ * boolean 参数必须是布尔值，使用严格比较，所以{@link https://developer.mozilla.org/en-US/docs/Glossary/Truthy 真值}也不行<br/>
  * function 参数必须是函数<br/>
  * array 参数必须是数组<br/>
- * date 参数必须是日期（js的原生日期类型Date）<br/>
- * dom 参数必须是HTMLElement<br/>
+ * date 参数必须是Date日期类型<br/>
+ * dom 参数必须是HTMLElement（dom类型）<br/>
  * map 参数必须是Map类型（WeakMap也不行）<br/>
  * regExp 参数必须是正则表达式<br/>
  * symbol 参数必须是Symbol<br/>
@@ -20,7 +20,7 @@ export type ParameterSimpleType = 'required' | 'number' | 'string' | 'boolean' |
 export type VerifyCustomType = (value: any) => boolean;
 
 /**
- * 参数验证类型<br/>
+ * 参数验证类型，以下所有验证前面皆可加?，表示该验证为可选的<br/>
  * ParameterSimpleType 简单参数验证类型<br/>
  * ['instanceof', Function] instanceof验证，验证参数继承自某个类<br/>
  * ['custom', VerifyCustomType] 自定义验证，传入自定义验证方法<br/>

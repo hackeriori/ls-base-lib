@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, shallowRef} from 'vue';
+import {onMounted, shallowRef, watch} from 'vue';
 import {EditorState} from '@codemirror/state';
 import {basicSetup, EditorView} from 'codemirror';
 import {vue} from '@codemirror/lang-vue';
@@ -17,6 +17,11 @@ const previewRef = shallowRef();
 let iFrame: HTMLIFrameElement | null = null;
 let sourceCode = '';
 let messageFlag = Math.random();
+
+watch(() => props.code, () => {
+  sourceCode = props.code;
+  dealCode(sourceCode);
+})
 
 /**
  * 创建沙盒
