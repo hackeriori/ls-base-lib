@@ -17,10 +17,17 @@ const previewRef = shallowRef();
 let iFrame: HTMLIFrameElement | null = null;
 let sourceCode = '';
 let messageFlag = Math.random();
+let editor: EditorView
 
 watch(() => props.code, () => {
   sourceCode = props.code;
-  dealCode(sourceCode);
+  editor.dispatch({
+    changes: {
+      from: 0,
+      to: editor.state.doc.length,
+      insert: sourceCode
+    }
+  })
 })
 
 /**
@@ -145,7 +152,7 @@ function preViewReady(ev: MessageEvent) {
 window.addEventListener('message', preViewReady);
 
 onMounted(() => {
-  new EditorView({
+  editor = new EditorView({
     state: EditorState.create({
       doc: props.code,
       extensions: [

@@ -13,6 +13,10 @@ declare module 'vue' {
     ExampleBox: typeof import('./src/components/exampleBox/ExampleBox.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TypeScriptCodeViewer: typeof import('./src/components/TypeScriptCodeViewer.vue')['default']
     VuePlayground: typeof import('./src/components/vuePlayground/VuePlayground.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

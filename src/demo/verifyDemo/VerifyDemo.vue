@@ -4,9 +4,9 @@
       <h1>验证类Verify</h1>
       <h3>背景环境</h3>
       <div>当你使用ts完成一个类库后，如何确保在js环境也获得类型校验的功能？考虑如下示例：</div>
-      <div style="display: flex">
-        <div ref="editorRef1" style="margin-right: 1em"></div>
-        <div ref="editorRef2"></div>
+      <div style="display: flex;min-height: 165px" v-loading="loadingCode">
+        <TypeScriptCodeViewer :code="code1" style="margin-right: 1em"></TypeScriptCodeViewer>
+        <TypeScriptCodeViewer :code="code2"></TypeScriptCodeViewer>
       </div>
       <div>Verify帮助我们将验证提前到参数定义阶段，省去函数体内验证代码，函数体内写函数本身要实现的功能即可。</div>
       <h3>类型定义</h3>
@@ -22,76 +22,65 @@
         </li>
       </ul>
       <h3>验证示例</h3>
-      <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected">
-        <option v-for="item in examples" :value="item.index">{{ item.title }}</option>
-      </select>
-      <VuePlayground v-if="exampleCode" :code="exampleCode" :import-map="importMap" style="height: 250px"></VuePlayground>
+      <div v-loading="loadingExample">
+        <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected">
+          <option v-for="item in examples" :value="item.index">{{ item.title }}</option>
+        </select>
+        <VuePlayground v-if="exampleCode" :code="exampleCode" :import-map="importMap"
+                       style="height: 250px"></VuePlayground>
+      </div>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import VuePlayground from '../../components/vuePlayground/VuePlayground.vue';
-import {onMounted, ref, shallowRef} from 'vue';
-import {basicSetup, EditorView} from 'codemirror';
-import {EditorState} from '@codemirror/state';
-import {javascript} from '@codemirror/lang-javascript';
+import {defineAsyncComponent, ref, shallowRef} from 'vue';
 
-const editorRef1 = shallowRef();
-const editorRef2 = shallowRef();
-const importMap = {
-  'ls-base-lib': './lsBaseLib.es.js'
-};
-const examples = [
-  {index: 1, title: '必要性和数字类型验证', code: import('./NumberVerifyTest.vue?raw')},
-  {index: 2, title: '字符串可选类型验证', code: import('./StringVerifyTest.vue?raw')}
-]
-const exampleIndex = ref(1);
-const exampleCode = shallowRef('');
-
-async function exampleSelected() {
-  const codePromise = examples.find(item => item.index === exampleIndex.value).code;
-  exampleCode.value = (await codePromise).default;
-}
-
-exampleSelected();
-
-onMounted(() => {
-  new EditorView({
-    state: EditorState.create({
-      doc: `// 使用代码验证，在函数体内实现验证逻辑
+const loadingExample = ref(true);
+const loadingCode = ref(true);
+const VuePlayground = defineAsyncComponent(async () => {
+    const x = await import('../../components/vuePlayground/VuePlayground.vue');
+    loadingExample.value = false;
+    return x.default
+  }
+)
+const TypeScriptCodeViewer = defineAsyncComponent(async () => {
+  const x = await import('../../components/TypeScriptCodeViewer.vue');
+  loadingCode.value = false;
+  return x.default
+})
+const code1 = `// 使用代码验证，在函数体内实现验证逻辑
 class testClass{
   twoNumberAddTestFun(a:number, b:number){
     if(!Number.isFinite(a) || !Number.isFinite(b))
       throw new Error('a and b must be number');
     return a * b;
   }
-}`,
-      extensions: [
-        basicSetup,
-        javascript()
-      ]
-    }),
-    parent: editorRef1.value
-  });
-  new EditorView({
-    state: EditorState.create({
-      doc: `// 使用Verify验证，定义参数时验证即完成
+}`;
+const code2 = `// 使用Verify验证，定义参数时验证即完成
 const v = new Verify();
 class testClass{
   @v.fun()
   twoNumberAddTestFun(@v.param('required', 'number') a: number, @v.param('required', 'number') b: number){
     return a * b;
   }
-}`,
-      extensions: [
-        basicSetup,
-        javascript()
-      ]
-    }),
-    parent: editorRef2.value
-  });
-})
+}`;
+const importMap = {
+  'ls-base-lib': './lsBaseLib.es.js'
+};
+const examples = [
+  {index: 1, title: '必要性和数字类型验证', code: () => import('./NumberVerifyTest.vue?raw')},
+  {index: 2, title: '字符串可选类型验证', code: () => import('./StringVerifyTest.vue?raw')}
+]
+const exampleIndex = ref(1);
+const exampleCode = shallowRef('');
+
+async function exampleSelected() {
+  const codePromise = examples.find(item => item.index === exampleIndex.value).code;
+  exampleCode.value = (await codePromise()).default;
+}
+
+exampleSelected();
 </script>
 
 <style scoped>
