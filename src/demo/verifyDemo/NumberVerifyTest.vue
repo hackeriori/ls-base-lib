@@ -23,9 +23,11 @@ class testClass {
 // 创建测试类的实例，这里声明为any类型是因为环境是ts，不这样写下面的示例无法通过ts的类型检测。
 const t: any = new testClass();
 
-function getValue(value: number | string) {
+function getValue(value: string) {
   if (value === '')
     return undefined;
+  else if (/^\d+$/.test(value))
+    return Number(value);
   else
     return value;
 }
@@ -46,8 +48,8 @@ twoNumberAddTestFun();
 <template>
   <h3>必要性和数字类型验证</h3>
   <h4>尝试改变下面输入框的值，更改为非数字或清除，看看结果。</h4>
-  <div>第一个数：<input v-model.number="numberA" @input="twoNumberAddTestFun"/></div>
-  <div>第二个数：<input v-model.number="numberB" @input="twoNumberAddTestFun"/></div>
+  <div>第一个数：<input v-model="numberA" @input="twoNumberAddTestFun" name="numberA"/></div>
+  <div>第二个数：<input v-model="numberB" @input="twoNumberAddTestFun" name="numberB"/></div>
   <div>和为：{{ numberResult }}</div>
   <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
 </template>

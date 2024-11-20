@@ -25,7 +25,7 @@
       </ul>
       <h3>验证示例</h3>
       <div v-loading="loadingExample">
-        <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected">
+        <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected" name="examples">
           <option v-for="item in examples" :value="item.index">{{ item.title }}</option>
         </select>
         <VuePlayground :code="exampleCode" :import-map="importMap" style="height: 250px"></VuePlayground>
@@ -71,7 +71,7 @@ const importMap = {
 };
 const examples = [
   {index: 1, title: '必要性和数字类型验证', code: () => import('./NumberVerifyTest.vue?raw')},
-  {index: 2, title: '字符串可选类型验证', code: () => import('./StringVerifyTest.vue?raw')}
+  {index: 2, title: '字符串和可选类型验证', code: () => import('./StringVerifyTest.vue?raw')}
 ]
 const exampleIndex = ref(1);
 const exampleCode = shallowRef('');

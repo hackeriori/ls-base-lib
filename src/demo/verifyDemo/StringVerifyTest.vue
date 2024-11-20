@@ -2,9 +2,9 @@
 import {ref} from 'vue';
 import {Verify} from 'ls-base-lib';
 
-const numberResult = ref('');
-const numberA = ref(3);
-const numberB = ref(4);
+const stringResult = ref('');
+const stringA = ref('hello');
+const stringB = ref('world');
 const errMessage = ref('');
 
 // 创建验证类的示例，每个验证类示例对应一个类。
@@ -15,40 +15,43 @@ class testClass {
   // 标记待验证的方法
   @v.fun()
   // 添加参数的验证规则
-  twoNumberAddTestFun(@v.param('required', 'number') numberA: number, @v.param('required', 'number') numberB) {
-    return (numberA + numberB);
+  twoStringCombineTestFun(@v.param('string') stringA: string, @v.param('?string') stringB = 'world') {
+    return stringA + ' ' + stringB;
   }
 }
 
 // 创建测试类的实例，这里声明为any类型是因为环境是ts，不这样写下面的示例无法通过ts的类型检测。
 const t: any = new testClass();
 
-function getValue(value: number | string) {
+function getValue(value: string) {
   if (value === '')
     return undefined;
+  else if(/^\d+$/.test(value))
+    return Number(value);
   else
     return value;
 }
 
-function twoNumberAddTestFun() {
+function twoStringCombineFun() {
   try {
-    numberResult.value = t.twoNumberAddTestFun(getValue(numberA.value), getValue(numberB.value)).toString();
+    // 由于调用的时候第一个参数是传了的，所以必定导致验证，如果不传那么不会验证，第二个参数不传或传undefined都将使用默认值。
+    stringResult.value = t.twoStringCombineTestFun(getValue(stringA.value), getValue(stringB.value));
     errMessage.value = '';
   } catch (e) {
-    numberResult.value = '';
+    stringResult.value = '';
     errMessage.value = e.toString();
   }
 }
 
-twoNumberAddTestFun();
+twoStringCombineFun();
 </script>
 
 <template>
-  <h3>必要性和数字类型验证</h3>
-  <h4>尝试改变下面输入框的值，更改为非数字或清除，看看结果。</h4>
-  <div>第一个数：<input v-model.number="numberA" @input="twoNumberAddTestFun"/></div>
-  <div>第二个数：<input v-model.number="numberB" @input="twoNumberAddTestFun"/></div>
-  <div>和为：{{ numberResult }}</div>
+  <h3>字符串和可选类型验证</h3>
+  <h4>尝试改变下面输入框的值，更改为非字符串或清除，看看结果。</h4>
+  <div>第一个字符串：<input v-model="stringA" @input="twoStringCombineFun"/></div>
+  <div>第二个字符串：<input v-model="stringB" @input="twoStringCombineFun"/>（可选的）</div>
+  <div>合并后为：{{ stringResult }}</div>
   <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
 </template>
 
