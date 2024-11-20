@@ -26,8 +26,7 @@
         <select v-model="exampleIndex" style="margin-bottom: 1.5em" @change="exampleSelected">
           <option v-for="item in examples" :value="item.index">{{ item.title }}</option>
         </select>
-        <VuePlayground v-if="exampleCode" :code="exampleCode" :import-map="importMap"
-                       style="height: 250px"></VuePlayground>
+        <VuePlayground :code="exampleCode" :import-map="importMap" style="height: 250px"></VuePlayground>
       </div>
     </el-scrollbar>
   </div>
