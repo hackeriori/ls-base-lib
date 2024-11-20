@@ -20,7 +20,7 @@ import {getParamName, getTypeName, verifiers} from "./verifiers";
  * class someClass {
  *   someMethod(a: number, b: number) {
  *     // 参数a，b未传或不为数字的情况下，直接抛出错误
- *     if (typeof a !== 'number' || typeof b !== 'number') {
+ *     if(!Number.isFinite(a) || !Number.isFinite(b)) {
  *       throw new Error('a and b must be number');
  *     }
  *     return a + b;
