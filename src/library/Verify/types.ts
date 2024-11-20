@@ -11,7 +11,8 @@
  * map 参数必须是Map类型（WeakMap也不行）<br/>
  * regExp 参数必须是正则表达式<br/>
  * symbol 参数必须是Symbol<br/>
- * asyncFunction 参数必须是异步函数
+ * asyncFunction 参数必须是异步函数<br/>
+ * 所有验证类型在{@link ParameterVerifyType 这里}
  * */
 export type ParameterSimpleType = 'required' | 'number' | 'string' | 'boolean' | 'function' | 'array' | 'date' | 'dom'
   | 'map' | 'regExp' | 'symbol' | 'asyncFunction';
@@ -20,11 +21,11 @@ export type ParameterSimpleType = 'required' | 'number' | 'string' | 'boolean' |
 export type VerifyCustomType = (value: any) => boolean;
 
 /**
- * 参数验证类型，以下所有验证前面皆可加?，表示该验证为可选的<br/>
- * ParameterSimpleType 简单参数验证类型<br/>
- * ['instanceof', Function] instanceof验证，验证参数继承自某个类<br/>
- * ['custom', VerifyCustomType] 自定义验证，传入自定义验证方法<br/>
- * ['custom', VerifyCustomType, string] 自定义验证，传入自定义验证方法和自定义错误信息
+ * 参数验证类型，以下所有验证前面皆可加?，表示该验证为可选的，例如['?number']<br/>
+ * {@link ParameterSimpleType} 简单参数验证类型<br/>
+ * ['instanceof', Function] instanceof验证，验证参数应该继承自某个类<br/>
+ * ['custom', VerifyCustomType] 自定义验证，传入{@link VerifyCustomType 自定义验证方法}<br/>
+ * ['custom', VerifyCustomType, string] 自定义验证，传入{@link VerifyCustomType 自定义验证方法}和自定义错误信息
  */
 export type ParameterVerifyType =
   ParameterSimpleType | AddQuestionMark<Exclude<ParameterSimpleType, 'required'>>
