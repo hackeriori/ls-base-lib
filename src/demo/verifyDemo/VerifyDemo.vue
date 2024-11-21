@@ -11,7 +11,7 @@
       <div>Verify帮助我们将验证提前到参数定义阶段，省去函数体内验证代码，函数体内写函数本身要实现的功能即可。</div>
       <h3>类型定义</h3>
       请移步类型定义页关于<a target="_blank" href="/ls-base-lib/classes/index.Verify.html">Verify类</a>部分，和<a
-      target="_blank" href="/ls-base-lib/types/declaration.ParameterVerifyType.html">基础验证类型</a>，<a
+      target="_blank" href="/ls-base-lib/types/declaration.ParameterSimpleType.html">基础验证类型</a>，<a
       target="_blank" href="/ls-base-lib/types/declaration.ParameterVerifyType.html">所有验证类型</a>
       <h3>验证规则</h3>
       <ul>
@@ -52,7 +52,7 @@ const TypeScriptCodeViewer = defineAsyncComponent(async () => {
 })
 const code1 = `// 使用代码验证，在函数体内实现验证逻辑
 class testClass{
-  twoNumberAddTestFun(a:number, b:number){
+  twoNumberAddFun(a:number, b:number){
     if(!Number.isFinite(a) || !Number.isFinite(b))
       throw new Error('a and b must be number');
     return a * b;
@@ -62,7 +62,7 @@ const code2 = `// 使用Verify验证，定义参数时验证即完成
 const v = new Verify();
 class testClass{
   @v.fun()
-  twoNumberAddTestFun(@v.param('required', 'number') a: number, @v.param('required', 'number') b: number){
+  twoNumberAddFun(@v.param('required', 'number') a: number, @v.param('required', 'number') b: number){
     return a * b;
   }
 }`;
@@ -71,7 +71,8 @@ const importMap = {
 };
 const examples = [
   {index: 1, title: '必要性和数字类型验证', code: () => import('./NumberVerifyTest.vue?raw')},
-  {index: 2, title: '字符串和可选类型验证', code: () => import('./StringVerifyTest.vue?raw')}
+  {index: 2, title: '字符串和可选类型验证', code: () => import('./StringVerifyTest.vue?raw')},
+  {index: 3, title: 'boolean类型验证', code: () => import('./BooleanVerifyTest.vue?raw')}
 ]
 const exampleIndex = ref(1);
 const exampleCode = shallowRef('');
