@@ -72,7 +72,8 @@ const importMap = {
 const examples = [
   {index: 1, title: '必要性和数字类型验证', code: () => import('./NumberVerifyTest.vue?raw')},
   {index: 2, title: '字符串和可选类型验证', code: () => import('./StringVerifyTest.vue?raw')},
-  {index: 3, title: 'boolean类型验证', code: () => import('./BooleanVerifyTest.vue?raw')}
+  {index: 3, title: 'boolean类型验证', code: () => import('./BooleanVerifyTest.vue?raw')},
+  {index: 4, title: 'instanceof类型验证', code: () => import('./InstanceofVerifyTest.vue?raw')},
 ]
 const exampleIndex = ref(1);
 const exampleCode = shallowRef('');

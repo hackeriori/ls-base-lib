@@ -1,6 +1,6 @@
 <template>
   <div class="height100">
-    <div class="ls-text-halfLine" v-for="item in showInListRouters" :key="item.path">
+    <div class="ls-text-halfLine" v-for="item in showInListRouters" :key="item.path" style="margin:0.5em 0">
       <router-link :to="{
         path:item.path,
         query:item.meta?.query,
