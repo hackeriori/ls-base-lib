@@ -20,7 +20,7 @@ export async function imgGetCanvasRect(canvas: HTMLCanvasElement, x: number, y: 
     const tempCtx = tempCanvas.getContext('2d');
     if (tempCtx) {
       tempCtx.putImageData(imageData, 0, 0);
-      return new Promise(resolve => {
+      return new Promise<Blob | undefined>(resolve => {
         tempCanvas.toBlob(blob => {
           if (blob)
             resolve(blob);
@@ -75,7 +75,7 @@ export function imgResize(img: HTMLImageElement, sortSide: number, exportType?: 
     canvas.height = targetHeight;
     // 图片绘制
     context.drawImage(img, 0, 0, targetWidth, targetHeight);
-    return new Promise(resolve => {
+    return new Promise<Blob | undefined>(resolve => {
       canvas.toBlob(blob => {
         if (blob)
           resolve(blob);
