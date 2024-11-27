@@ -8,7 +8,7 @@ import {ParameterCacheType, ParameterVerifyType, VerifyFactorType, VerifyFunType
 function getMethodName(target: any, propertyKey: PropertyKey) {
   // 当直接使用类本身时，类本身是Function
   const className = typeof target === 'object' ? target.constructor.name : target.name;
-  return `${className}类中的${propertyKey.toString()}方法中：`;
+  return `${className}类中的${propertyKey.toString()}方法中，`;
 }
 
 /**
@@ -42,7 +42,7 @@ function verifyParamFactory(testFun: VerifyFactorType, verifyText: string | ((i:
         }
     }
     if (!isVerified)
-      throw `${getMethodName(target, propertyKey)}${errorList.join('；')}！`
+      throw `参数校验失败：${getMethodName(target, propertyKey)}${errorList.join('；')}！`
   }
 }
 
@@ -85,7 +85,7 @@ verifiers.set('symbol', verifyParamFactory(x => typeof x === 'symbol', '必须�
 verifiers.set('asyncFunction', verifyParamFactory(x => typeof x === 'function' && x.constructor.name === 'AsyncFunction', '必须是异步函数'));
 
 //instanceof验证
-verifiers.set('instanceof', verifyParamFactory((x, i) => x instanceof i.instance!, i => `必须是[${i.instance!.name}]的实例类型`));
+verifiers.set('instanceof', verifyParamFactory((x, i) => x instanceof i.instance!, i => `必须是 ${i.instance!.name} 的实例类型`));
 
 //custom验证
 verifiers.set('custom', verifyParamFactory((x, i) => i.custom!(x), i => i.customText || '自定义校验失败'));
@@ -124,7 +124,7 @@ verifiers.set('?symbol', verifyParamFactory(x => x === undefined || typeof x ===
 verifiers.set('?asyncFunction', verifyParamFactory(x => x === undefined || (typeof x === 'function' && x.constructor.name === 'AsyncFunction'), '必须是异步函数或者不传'));
 
 //可选的instanceof验证
-verifiers.set('?instanceof', verifyParamFactory((x, i) => x === undefined || x instanceof i.instance!, i => `必须是[${i.instance!.name}]的实例类型或者不传`));
+verifiers.set('?instanceof', verifyParamFactory((x, i) => x === undefined || x instanceof i.instance!, i => `必须是 ${i.instance!.name} 的实例类型或者不传`));
 
 //可选的custom验证
 verifiers.set('?custom', verifyParamFactory((x, i) => x === undefined || i.custom!(x), i => i.customText || '自定义校验失败或者不传'));

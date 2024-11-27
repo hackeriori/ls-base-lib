@@ -52,7 +52,7 @@ twoStringCombineFun();
   <div>第一个字符串：<input v-model="stringA" @input="twoStringCombineFun"/></div>
   <div>第二个字符串：<input v-model="stringB" @input="twoStringCombineFun"/>（可选的）</div>
   <div>合并后为：{{ stringResult }}</div>
-  <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
+  <div v-if="errMessage" style="color:#ff0000">{{ errMessage }}</div>
 </template>
 
 <style scoped>

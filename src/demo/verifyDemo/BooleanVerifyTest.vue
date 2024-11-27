@@ -49,7 +49,7 @@ jsonWrapFun();
     <input type="text" v-model="inputValue" name="booleanValue" @input="jsonWrapFun"/>
   </div>
   <div>输出结果：{{ jsonResult }}</div>
-  <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
+  <div v-if="errMessage" style="color:#ff0000">{{ errMessage }}</div>
 </template>
 
 <style scoped>

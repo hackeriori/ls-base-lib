@@ -70,7 +70,7 @@ animalFun();
     <label for='phone'>Phone</label>
   </div>
   <div>输出结果：{{ messageResult }}</div>
-  <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
+  <div v-if="errMessage" style="color:#ff0000">{{ errMessage }}</div>
 </template>
 
 <style scoped>

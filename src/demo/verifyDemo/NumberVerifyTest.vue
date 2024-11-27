@@ -51,7 +51,7 @@ twoNumberAddTestFun();
   <div>第一个数：<input v-model="numberA" @input="twoNumberAddTestFun" name="numberA"/></div>
   <div>第二个数：<input v-model="numberB" @input="twoNumberAddTestFun" name="numberB"/></div>
   <div>和为：{{ numberResult }}</div>
-  <div v-if="errMessage" style="color:#ff0000">错误信息：{{ errMessage }}</div>
+  <div v-if="errMessage" style="color:#ff0000">{{ errMessage }}</div>
 </template>
 
 <style scoped>
