@@ -1,26 +1,5 @@
 import {arrRemove} from "../util/arrayUtil";
-
-/**
- * {@link EventDispatcher} 派发的最小基本事件 .
- */
-export interface BaseEvent<TEventType extends string = string> {
-  readonly type: TEventType;
-}
-
-/**
- * {@link EventDispatcher} 派发的已触发事件的最小预期事件.
- */
-export interface Event<TEventType extends string = string, TTarget = unknown> {
-  readonly type: TEventType;
-  readonly target: TTarget;
-}
-
-/**
- * {@link EventDispatcher} 的监听事件类型
- */
-export type EventListener<TEventData, TEventType extends string, TTarget> = (
-  event: TEventData & Event<TEventType, TTarget>,
-) => void;
+import type {BaseEvent, EventListener, Event} from "./types";
 
 /**
  * 事件派发类
@@ -101,7 +80,7 @@ class EventDispatcher<TEventMap extends {} = {}> {
       Object.defineProperty(event, 'target', {
         configurable: true,
         enumerable: true,
-        value: this,
+        value: this
       })
       // 复制一份，以防迭代时被外部移除。.
       const array = listenerArray.slice(0);

@@ -1,7 +1,15 @@
 /**
  * 从route.query中获取指定名称的参数信息，
- * @param query route.query
+ *
+ * @param query vue路由，route.query
  * @param param 参数名
+ *
+ * @example
+ * const query = useRoute().query;
+ * const modelName = vueGetParamFromQuery(query, 'model');
+ * if (modelName) {
+ *   // do something
+ * }
  */
 export function vueGetParamFromQuery(query: Record<string, (string | null) | (string | null)[]>, param: string) {
   let modelName = query[param];
@@ -16,9 +24,8 @@ export function vueGetParamFromQuery(query: Record<string, (string | null) | (st
   return null
 }
 
-/**
- * 注入帮助类，与Methods混合使用，适用于vue2
- */
+
+/* region 废弃代码，用于vue2
 export class VueInjectHelper<Provide, Tuple extends any[] = []> {
   injects: string[] = [];
 
@@ -32,7 +39,6 @@ export class VueInjectHelper<Provide, Tuple extends any[] = []> {
   }
 }
 
-/**
- * 提供按InjectHelper与Provide混合，适用于vue2
- */
+
 export type VueMixinMethods<Provide, InjectHelper extends readonly any[]> = Partial<Pick<Provide, InjectHelper[number]>>
+*/

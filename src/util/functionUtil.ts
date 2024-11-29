@@ -1,19 +1,21 @@
-interface DebounceReturnFunType<T extends (...args: any) => any> {
-  (...arg: Parameters<T>): void,
-
-  // 取消执行
-  cancel(): void
-}
-
-type TaskHandlerType<T> = (task: T, index: number) => void;
-type TaskDoneType = (isBreak: boolean) => void;
+import type {DebounceReturnFunType, TaskDoneType, TaskHandlerType} from './types';
 
 /**
- * 防抖，目标函数在防抖时间内不会执行，每次执行防抖方法都会造成防抖时间延长，超过防抖时间才会执行
- * @param fn 目标函数
- * @param delay 防抖时间
- * @param immediate 是否立即执行
- * @param resultCallback 用于获取目标函数执行结果的回调方法
+ * 创建一个防抖函数，限制函数在指定时间内只能被调用一次。
+ *
+ * @param fn - 要防抖处理的函数。
+ * @param delay - 防抖时间间隔，单位为毫秒。
+ * @param immediate - 是否立即执行函数，默认为 `false`。如果设置为 `true`，则在延迟前立即执行函数。
+ * @param resultCallback - 可选参数，用于处理防抖后函数的返回结果。
+ * @returns 返回一个防抖后的函数。
+ *
+ * @example
+ * ```typescript
+ * const handleResize = funDebounce(() => {
+ *   console.log('Window resized');
+ * }, 200);
+ * window.addEventListener('resize', handleResize);
+ * ```
  */
 export function funDebounce<T extends (...args: any) => any>(fn: T, delay: number, immediate = false, resultCallback?: (result: ReturnType<T>) => void) {
   let timer: NodeJS.Timeout | null = null
@@ -46,11 +48,28 @@ export function funDebounce<T extends (...args: any) => any>(fn: T, delay: numbe
 }
 
 /**
- * 分片执行任务（使用空闲时间执行，缺点是页面在任务重的情况下几乎没有时间执行回调）
+ * 分片执行任务（使用浏览器空闲时间执行，如果页面在任务重的情况下（例如三维渲染），几乎没有空闲时间执行回调）
  * @param tasks 任务数组或任务的执行次数
  * @param taskHandler 执行任务的具体方法，两个参数，task任务，index任务对应的序号。
  * @param finishCallback 执行完成回调，一个参数，isBreak是否被中断
- * @return breaker 任务中断方法
+ * @return 任务中断方法
+ *
+ * @example
+ * const tasks = [1, 2, 3, 4, 5];
+ * const taskHandler = (task: number) => {
+ *   console.log(`Processing task ${task}`);
+ * };
+ * const finishCallback = (isBreak: boolean) => {
+ *   if (isBreak) {
+ *     console.log('Execution interrupted');
+ *   } else {
+ *     console.log('All tasks completed');
+ *   }
+ * };
+ *
+ * const breakExec = funIdleRun(tasks, taskHandler, finishCallback);
+ * // 执行任务...
+ * // 如果需要中断执行，可以调用 breakExec() 函数
  */
 export function funIdleRun<T>(tasks: T[] | number, taskHandler: TaskHandlerType<T>, finishCallback?: TaskDoneType) {
   let _tasks: ArrayLike<T> = Array.isArray(tasks) ? tasks : {length: tasks};
@@ -87,13 +106,30 @@ export function funIdleRun<T>(tasks: T[] | number, taskHandler: TaskHandlerType<
 }
 
 /**
- * 分片执行任务（使用宏任务执行）
+ * 分片执行任务（使用宏任务执行）<br/>
  * 这里之所以不使用每次任务后判断执行时间是否超过17ms来自动中断任务，是因为performance.now()是个重方法，它的执行时间大概比计算慢1000倍，这样导致整个任务周期内，80%的时间用于时间比较。
  * @param tasks 任务数组或任务的执行次数
  * @param numberPerTime 每个时间片执行的任务数量，需要自行评估该数量（可以使用performance.now()计算大致时间，尽量控制在17ms）
  * @param taskHandler 执行任务的具体方法，两个参数，task任务，index任务对应的序号。
  * @param finishCallback 执行完成回调，一个参数，isBreak是否被中断
- * @return breaker 任务中断方法
+ * @return 任务中断方法
+ *
+ * @example
+ * const tasks = [1, 2, 3, 4, 5];
+ * const taskHandler = (task: number) => {
+ *   console.log(`Processing task ${task}`);
+ * };
+ * const finishCallback = (isBreak: boolean) => {
+ *   if (isBreak) {
+ *     console.log('Execution interrupted');
+ *   } else {
+ *     console.log('All tasks completed');
+ *   }
+ * };
+ *
+ * const breakExec = funTaskRun(tasks, 2, taskHandler, finishCallback);
+ * // 执行任务...
+ * // 如果需要中断执行，可以调用 breakExec() 函数
  */
 export function funTaskRun<T>(tasks: T[] | number, numberPerTime: number, taskHandler: TaskHandlerType<T>, finishCallback?: TaskDoneType) {
   let _tasks: ArrayLike<T> = Array.isArray(tasks) ? tasks : {length: tasks};

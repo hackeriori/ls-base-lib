@@ -1,10 +1,11 @@
-export interface MessageEventExt<T, U> extends MessageEvent<T> {
-  parseData: U
-}
+import type {MessageEventExt, WSMessageType, WSMessageTypeExt} from './types';
 
-export type WSMessageTypeExt<T, U> = (ev: MessageEventExt<T, U>) => void;
-export type WSMessageType<T> = (ev: MessageEvent<T>) => void;
-
+/**
+ * WebSocket链接器类，提供WebSocket连接和消息处理功能。
+ *
+ * @template T - 解析后数据的类型。
+ * @template U - 是否需要解析数据的标志。
+ */
 export class WebSocketLinker<T, U extends boolean> {
   //WebSocket连接实例
   #ws: WebSocket | null = null;
@@ -19,6 +20,14 @@ export class WebSocketLinker<T, U extends boolean> {
   //消息体处理函数，处理原始消息（在messageHandler之前）
   readonly #parseFun?: (ev: MessageEvent<string>) => string
 
+  /**
+   * 构造函数，初始化WebSocket连接器。
+   *
+   * @param url - WebSocket链接地址。
+   * @param parseData - 是否需要解析数据的标志。
+   * @param messageHandler - 消息处理函数。
+   * @param parseFun - 可选的消息体处理函数，用于预处理原始消息。
+   */
   constructor(url: string, parseData: U, messageHandler: U extends true ? WSMessageTypeExt<string, T> : WSMessageType<string>, parseFun?: (ev: MessageEvent<string>) => string) {
     this.#url = url;
     this.#messageHandler = messageHandler;
@@ -26,6 +35,9 @@ export class WebSocketLinker<T, U extends boolean> {
     this.#parseFun = parseFun;
   }
 
+  /**
+   * 处理WebSocket关闭事件，设置重连句柄。
+   */
   #closeEvent = () => {
     this.cancelReConnect();
     this.#reConnect = setInterval(() => {
@@ -33,7 +45,9 @@ export class WebSocketLinker<T, U extends boolean> {
     }, 10000) as any as number;
   }
 
-  //连接
+  /**
+   * 连接WebSocket并添加事件监听器。
+   */
   connect() {
     if (!this.#ws) {
       this.#ws = new WebSocket(this.#url);
@@ -65,7 +79,9 @@ export class WebSocketLinker<T, U extends boolean> {
     }
   }
 
-  //取消重连
+  /**
+   * 取消重连句柄。
+   */
   cancelReConnect() {
     if (this.#reConnect) {
       clearInterval(this.#reConnect);
@@ -73,7 +89,9 @@ export class WebSocketLinker<T, U extends boolean> {
     }
   }
 
-  //关闭连接
+  /**
+   * 关闭WebSocket连接并移除事件监听器。
+   */
   close() {
     this.#ws?.removeEventListener('close', this.#closeEvent);
     this.#ws?.close();

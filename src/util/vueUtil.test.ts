@@ -1,6 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {vueGetParamFromQuery, VueInjectHelper, VueMixinMethods} from "./vueUtil";
-import type {Equal, Expect} from "../toolTypes";
+import {vueGetParamFromQuery} from "./vueUtil";
 
 describe('测试从query中获取参数', () => {
   const query = {
@@ -18,6 +17,7 @@ describe('测试从query中获取参数', () => {
   });
 })
 
+/*
 describe('测试inject混合方法', () => {
   type ProvideType = {
     name: string,
@@ -34,3 +34,4 @@ describe('测试inject混合方法', () => {
     Expect<Equal<VueMixinMethods<ProvideType, typeof inject>, Partial<Omit<ProvideType, 'age'>>>>
   ]
 })
+*/

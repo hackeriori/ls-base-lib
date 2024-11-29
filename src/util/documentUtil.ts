@@ -108,7 +108,7 @@ export function docDownloadFile(url: string, name?: string): void {
  * @returns 无返回值。
  *
  * @example
- * // 后端需要添加Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition")，并设置好文件名为example.xlsx
+ * // 后端需要添加Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition")，并设置好文件名，例如为example.xlsx
  * axios.get('https://api.example.com/download', {
  *   responseType: 'arraybuffer' // 确保请求类型为流
  * }).then((response) => {

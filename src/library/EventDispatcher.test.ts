@@ -1,5 +1,6 @@
 import {describe, it, expect, vi} from 'vitest';
-import {EventDispatcher, BaseEvent} from './EventDispatcher'; // 假设你的文件名为 EventDispatcher.ts
+import {EventDispatcher} from './EventDispatcher';
+import type {BaseEvent} from './types'; // 假设你的文件名为 EventDispatcher.ts
 
 // 自定义事件接口
 interface MyEventMap {
