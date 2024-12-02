@@ -1,6 +1,6 @@
 {
   "name": "ls-base-lib",
-  "version": "1.2.15",
+  "version": "2.0.0",
   "description": "A library with no framework dependencies (e.g. vue) that encapsulates some pure native js and css. It is exported using module and umd.",
   "main": "dist/lsBaseLib.umd.js",
   "module": "dist/lsBaseLib.es.js",
@@ -18,6 +18,7 @@
     "dev": "vite",
     "buildLib": "vue-tsc --noEmit && vite build && esbuild dist/lsBaseLib.es.js --minify --format=esm --allow-overwrite --outfile=dist/lsBaseLib.es.js && vue-tsc --emitDeclarationOnly",
     "buildHtml": "typedoc && vite build --config vite.config.html.ts",
+    "buildCss": "lessc src/css/ls.less public/css/ls.css",
     "test": "vitest"
   },
   "devDependencies": {

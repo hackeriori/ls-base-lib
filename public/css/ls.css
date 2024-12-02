@@ -1,1 +1,334 @@
-.ls-abs-outer{position:relative}.ls-abs-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.ls-flex{display:flex}.ls-flexV{display:flex;flex-direction:column}.ls-flexWap{display:flex;flex-wrap:wrap}.ls-flexWapV{display:flex;flex-direction:column;flex-wrap:wrap}.ls-flex-center{justify-content:center}.ls-flex-centerV{align-items:center}.ls-flex-end{justify-content:flex-end}.ls-flex-endV{align-items:flex-end}.ls-flex-between{justify-content:space-between}.ls-flex-around{justify-content:space-around}.ls-flex-unShrink>div{flex-shrink:0}.ls-flex-unShrink>.ls-flex-subItem-grow{flex-grow:1;width:0}.ls-flex-unShrink>.ls-flex-subItem-growV{flex-grow:1;height:0}.height100{height:100%}.width100{width:100%}.ls-text-unWarp{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ls-text-rtl{direction:rtl}.ls-text-center{text-align:center}.ls-margin{margin:1em}.ls-marginV{margin:1em 0}.ls-marginH{margin:0 1em}.ls-margin-top{margin-top:1em}.ls-margin-bottom{margin-bottom:1em}.ls-margin-half{margin:.5em 0}.ls-margin-top-half{margin-top:.5em}.ls-margin-bottom-half{margin-bottom:.5em}.ls-padding{padding:1em 0;box-sizing:border-box}.ls-padding-top{padding-top:1em;box-sizing:border-box}.ls-padding-bottom{padding-bottom:1em;box-sizing:border-box}.ls-padding-half{padding:.5em 0;box-sizing:border-box}.ls-padding-top-half{padding-top:.5em;box-sizing:border-box}.ls-padding-bottom-half{padding-bottom:.5em;box-sizing:border-box}.ls-text-hover{cursor:pointer}.ls-text-hover:hover{color:var(--el-color-primary)}.ls-panel{background-color:var(--el-color-white);border:var(--el-border);box-shadow:var(--el-box-shadow);border-radius:var(--el-border-radius-base)}.ls-am-right-enter-active,.ls-am-right-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-right-enter-from,.ls-am-right-leave-to{opacity:0;transform:translateX(100%)}.ls-am-bottom-enter-active,.ls-am-bottom-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-bottom-enter-from,.ls-am-bottom-leave-to{opacity:0;transform:translateY(100%)}.ls-am-left-enter-active,.ls-am-left-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-left-enter-from,.ls-am-left-leave-to{opacity:0;transform:translateX(-100%)}.ls-am-left-enter-active,.ls-am-left-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-left-enter-from,.ls-am-left-leave-to{opacity:0;transform:translateX(-100%)}.ls-am-top-enter-active,.ls-am-top-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-top-enter-from,.ls-am-top-leave-to{opacity:0;transform:translateY(-100%)}.ls-am-center-enter-active,.ls-am-center-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-center-enter-from,.ls-am-center-leave-to{opacity:0;transform:translate(-50%,-50%) scale(.5)}.ls-am-center-fix-enter-active,.ls-am-center-fix-leave-active{transition-property:opacity,transform;transition-duration:.3s}.ls-am-center-fix-enter-from,.ls-am-center-fix-leave-to{opacity:0;transform:scale(.5)}
+/*绝对布局*/
+.ls-abs-outer {
+  position: relative;
+}
+.ls-abs-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/*flex布局*/
+/*-4种布局框架-*/
+.ls-flex {
+  display: flex;
+}
+.ls-flexV {
+  display: flex;
+  flex-direction: column;
+}
+.ls-flexWap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ls-flexWapV {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+/*-对齐方式-*/
+.ls-flex-center {
+  justify-content: center;
+}
+.ls-flex-centerV {
+  align-items: center;
+}
+.ls-flex-end {
+  justify-content: flex-end;
+}
+.ls-flex-endV {
+  align-items: flex-end;
+}
+.ls-flex-between {
+  justify-content: space-between;
+}
+.ls-flex-around {
+  justify-content: space-around;
+}
+/*flex子项属性*/
+.ls-flex-unShrink > div {
+  flex-shrink: 0;
+}
+.ls-flex-unShrink > .ls-flex-subItem-grow {
+  flex-grow: 1;
+  width: 0;
+}
+.ls-flex-unShrink > .ls-flex-subItem-growV {
+  flex-grow: 1;
+  height: 0;
+}
+/*容器高度*/
+.height100 {
+  height: 100%;
+}
+.width100 {
+  width: 100%;
+}
+/*文本超出长度后显示省略号*/
+.ls-text-unWarp {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/*文字从右向左排列*/
+.ls-text-rtl {
+  direction: rtl;
+}
+/*文本居中显示*/
+.ls-text-center {
+  text-align: center;
+}
+/*间隔相关*/
+.ls-margin-half {
+  margin: 0.5em;
+}
+.ls-marginH-half {
+  margin: 0 0.5em;
+}
+.ls-marginV-half {
+  margin: 0.5em 0;
+}
+.ls-marginTop-half {
+  margin-top: 0.5em;
+}
+.ls-marginRight-half {
+  margin-right: 0.5em;
+}
+.ls-marginBottom-half {
+  margin-bottom: 0.5em;
+}
+.ls-marginLeft-half {
+  margin-left: 0.5em;
+}
+.ls-padding-half {
+  padding: 0.5em;
+}
+.ls-paddingH-half {
+  padding: 0 0.5em;
+}
+.ls-paddingV-half {
+  padding: 0.5em 0;
+}
+.ls-paddingTop-half {
+  padding-top: 0.5em;
+}
+.ls-paddingRight-half {
+  padding-right: 0.5em;
+}
+.ls-paddingBottom-half {
+  padding-bottom: 0.5em;
+}
+.ls-paddingLeft-half {
+  padding-left: 0.5em;
+}
+.ls-margin-1 {
+  margin: 1em;
+}
+.ls-marginH-1 {
+  margin: 0 1em;
+}
+.ls-marginV-1 {
+  margin: 1em 0;
+}
+.ls-marginTop-1 {
+  margin-top: 1em;
+}
+.ls-marginRight-1 {
+  margin-right: 1em;
+}
+.ls-marginBottom-1 {
+  margin-bottom: 1em;
+}
+.ls-marginLeft-1 {
+  margin-left: 1em;
+}
+.ls-padding-1 {
+  padding: 1em;
+}
+.ls-paddingH-1 {
+  padding: 0 1em;
+}
+.ls-paddingV-1 {
+  padding: 1em 0;
+}
+.ls-paddingTop-1 {
+  padding-top: 1em;
+}
+.ls-paddingRight-1 {
+  padding-right: 1em;
+}
+.ls-paddingBottom-1 {
+  padding-bottom: 1em;
+}
+.ls-paddingLeft-1 {
+  padding-left: 1em;
+}
+.ls-margin-1half {
+  margin: 1.5em;
+}
+.ls-marginH-1half {
+  margin: 0 1.5em;
+}
+.ls-marginV-1half {
+  margin: 1.5em 0;
+}
+.ls-marginTop-1half {
+  margin-top: 1.5em;
+}
+.ls-marginRight-1half {
+  margin-right: 1.5em;
+}
+.ls-marginBottom-1half {
+  margin-bottom: 1.5em;
+}
+.ls-marginLeft-1half {
+  margin-left: 1.5em;
+}
+.ls-padding-1half {
+  padding: 1.5em;
+}
+.ls-paddingH-1half {
+  padding: 0 1.5em;
+}
+.ls-paddingV-1half {
+  padding: 1.5em 0;
+}
+.ls-paddingTop-1half {
+  padding-top: 1.5em;
+}
+.ls-paddingRight-1half {
+  padding-right: 1.5em;
+}
+.ls-paddingBottom-1half {
+  padding-bottom: 1.5em;
+}
+.ls-paddingLeft-1half {
+  padding-left: 1.5em;
+}
+.ls-margin-2 {
+  margin: 2em;
+}
+.ls-marginH-2 {
+  margin: 0 2em;
+}
+.ls-marginV-2 {
+  margin: 2em 0;
+}
+.ls-marginTop-2 {
+  margin-top: 2em;
+}
+.ls-marginRight-2 {
+  margin-right: 2em;
+}
+.ls-marginBottom-2 {
+  margin-bottom: 2em;
+}
+.ls-marginLeft-2 {
+  margin-left: 2em;
+}
+.ls-padding-2 {
+  padding: 2em;
+}
+.ls-paddingH-2 {
+  padding: 0 2em;
+}
+.ls-paddingV-2 {
+  padding: 2em 0;
+}
+.ls-paddingTop-2 {
+  padding-top: 2em;
+}
+.ls-paddingRight-2 {
+  padding-right: 2em;
+}
+.ls-paddingBottom-2 {
+  padding-bottom: 2em;
+}
+.ls-paddingLeft-2 {
+  padding-left: 2em;
+}
+/*可交互文字样式*/
+.ls-text-hover {
+  cursor: pointer;
+}
+.ls-text-hover:hover {
+  color: var(--el-color-primary);
+}
+/*面板样式*/
+.ls-panel {
+  background-color: var(--el-color-white);
+  border: var(--el-border);
+  box-shadow: var(--el-box-shadow);
+  border-radius: var(--el-border-radius-base);
+}
+/*结合vue transition动画的样式*/
+.ls-am-right-enter-active,
+.ls-am-right-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-right-enter-from,
+.ls-am-right-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.ls-am-bottom-enter-active,
+.ls-am-bottom-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-bottom-enter-from,
+.ls-am-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.ls-am-left-enter-active,
+.ls-am-left-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-left-enter-from,
+.ls-am-left-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.ls-am-left-enter-active,
+.ls-am-left-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-left-enter-from,
+.ls-am-left-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.ls-am-top-enter-active,
+.ls-am-top-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-top-enter-from,
+.ls-am-top-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.ls-am-center-enter-active,
+.ls-am-center-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-center-enter-from,
+.ls-am-center-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+.ls-am-center-fix-enter-active,
+.ls-am-center-fix-leave-active {
+  transition-property: opacity, transform;
+  transition-duration: 300ms;
+}
+.ls-am-center-fix-enter-from,
+.ls-am-center-fix-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}

@@ -67,7 +67,7 @@ class testClass{
   }
 }`;
 const importMap = {
-  'ls-base-lib': './lsBaseLib.es.js'
+  'ls-base-lib': 'https://unpkg.com/ls-base-lib@2.0.0/dist/lsBaseLib.es.js'
 };
 const examples = [
   {index: 1, title: '必要性和数字类型验证', code: () => import('./NumberVerifyTest.vue?raw')},
