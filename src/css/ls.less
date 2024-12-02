@@ -88,6 +88,7 @@
   text-overflow: ellipsis;
 }
 
+/*文字从右向左排列*/
 .ls-text-rtl {
   direction: rtl;
 }
@@ -98,70 +99,62 @@
 }
 
 /*间隔相关*/
-.ls-margin {
-  margin: 1em
-}
+each(range(4), {
+  @half: mod(@value, 2);
+  @integer: floor((@value/2));
+  @type: margin, padding;
+  @directions: Top, Right, Bottom, Left;
+  @directions-low: top, right, bottom, left;
+  each(@type, .(@vt) {
+    .ls-@{vt}-half when (@half = 1) and (@integer = 0) {
+        @{vt}: (@value * 0.5em);
+    }
+    .ls-@{vt}H-half when (@half = 1) and (@integer = 0) {
+        @{vt}: 0 (@value * 0.5em);
+    }
+    .ls-@{vt}V-half when (@half = 1) and (@integer = 0) {
+        @{vt}: (@value * 0.5em) 0;
+    }
 
-.ls-marginV {
-  margin: 1em 0;
-}
+    .ls-@{vt}-@{integer}half when (@half = 1) and not (@integer = 0) {
+        @{vt}: (@value * 0.5em);
+    }
 
-.ls-marginH {
-  margin: 0 1em
-}
+    .ls-@{vt}H-@{integer}half when (@half = 1) and not (@integer = 0) {
+        @{vt}: 0 (@value * 0.5em);
+    }
 
-.ls-margin-top {
-  margin-top: 1em;
-}
+    .ls-@{vt}V-@{integer}half when (@half = 1) and not (@integer = 0) {
+        @{vt}: (@value * 0.5em) 0;
+    }
 
-.ls-margin-bottom {
-  margin-bottom: 1em;
-}
+    .ls-@{vt}-@{integer} when (@half = 0) {
+        @{vt}: (@value * 0.5em);
+    }
+    .ls-@{vt}H-@{integer} when (@half = 0) {
+        @{vt}: 0 (@value * 0.5em);
+    }
+    .ls-@{vt}V-@{integer} when (@half = 0) {
+        @{vt}: (@value * 0.5em) 0;
+    }
+    each(@directions, .(@vd,@kd,@id) {
+      @direction: @vd;
+      @direction-name: extract(@directions-low, @id);
 
-/*间隔半行文本*/
-.ls-margin-half {
-  margin: 0.5em 0;
-}
+      .ls-@{vt}@{direction}-half when (@half = 1) and (@integer = 0) {
+          @{vt}-@{direction-name}: (@value * 0.5em);
+      }
 
-.ls-margin-top-half {
-  margin-top: 0.5em;
-}
+      .ls-@{vt}@{direction}-@{integer}half when (@half = 1) and not (@integer = 0) {
+          @{vt}-@{direction-name}: (@value * 0.5em);
+      }
 
-.ls-margin-bottom-half {
-  margin-bottom: 0.5em;
-}
-
-/*间隔一行文本*/
-.ls-padding {
-  padding: 1em 0;
-  box-sizing: border-box;
-}
-
-.ls-padding-top {
-  padding-top: 1em;
-  box-sizing: border-box;
-}
-
-.ls-padding-bottom {
-  padding-bottom: 1em;
-  box-sizing: border-box;
-}
-
-/*间隔半行文本*/
-.ls-padding-half {
-  padding: 0.5em 0;
-  box-sizing: border-box;
-}
-
-.ls-padding-top-half {
-  padding-top: 0.5em;
-  box-sizing: border-box;
-}
-
-.ls-padding-bottom-half {
-  padding-bottom: 0.5em;
-  box-sizing: border-box;
-}
+      .ls-@{vt}@{direction}-@{integer} when (@half = 0) {
+          @{vt}-@{direction-name}: (@value * 0.5em);
+      }
+    });
+  })
+});
 
 /*可交互文字样式*/
 .ls-text-hover {

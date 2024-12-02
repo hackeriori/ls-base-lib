@@ -61,19 +61,30 @@
       <div class="textBox ls-text-unWarp ls-text-rtl" title="这是一个比较长的测试文字">这是一个比较长的测试文字</div>
       <div class="title">文本居中显示，使用<span class="highlight">ls-text-center</span>来居中</div>
       <div class="textBox ls-text-center">居中显示</div>
-      <div class="title">文本间隔一行<span class="highlight">ls-text-line</span></div>
+      <div class="title">鼠标悬浮样式<span class="highlight">ls-text-hover</span>鼠标移上去后变成蓝色(--el-color-primary)</div>
+      <div class="textBox ls-text-hover">鼠标移上去</div>
+      <div class="title">文本间隔一行<span class="highlight">ls-marginV-1</span></div>
       <div style="border:1px solid var(--el-border-color)">
-        <div class="textBox ls-text-line">我上下有一行</div>
+        <div class="textBox ls-marginV-1">我上下有一行</div>
       </div>
-      <div class="title">文本间隔半行<span class="highlight">ls-text-halfLine</span></div>
+      <div class="title">文本间隔半行<span class="highlight">ls-marginV-half</span></div>
       <div style="border:1px solid var(--el-border-color)">
-        <div class="textBox ls-text-halfLine">我上下有半行</div>
+        <div class="textBox ls-marginV-half">我上下有半行</div>
+      </div>
+      <div class="title">文本间隔一行<span class="highlight">ls-paddingV-1</span></div>
+      <div style="border:1px solid var(--el-border-color)">
+        <div class="textBox ls-paddingV-1">我上下有一行</div>
+      </div>
+      <div class="title">文本间隔半行<span class="highlight">ls-paddingV-half</span></div>
+      <div style="border:1px solid var(--el-border-color)">
+        <div class="textBox ls-paddingV-half">我上下有半行</div>
+      </div>
+      <div class="title">类似的还有ls-<code style="color: #48df1e">(padding|margin)</code><code
+        style="color: #0d84ff">(V|H|Top|Right|Bottom|Left)</code>-<code style="color: brown">([1,2])([half])</code>
       </div>
       <div class="title">面板样式<span class="highlight">ls-panel</span>，面板带有圆角，阴影和边框</div>
       <div class="middleBox ls-panel" style="background-color: white">
       </div>
-      <div class="title">鼠标悬浮样式<span class="highlight">ls-text-hover</span>鼠标移上去后变成蓝色</div>
-      <div class="textBox ls-text-hover">鼠标移上去</div>
       <div class="title">宽度100%<span class="highlight">width100</span>观察蓝色部分占比</div>
       <div class="textBox ls-flex">
         <div style="width: 50%">
