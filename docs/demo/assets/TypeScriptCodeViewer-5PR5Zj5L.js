@@ -1,0 +1,1 @@
+import{n as a,r,u as s,m as n}from"./index-DwL_q3Fa.js";import{d as c,z as i,K as p,o as d,a as f}from"./index-9nl0zbxx.js";const w=c({__name:"TypeScriptCodeViewer",props:{code:{}},setup(t){const o=t,e=i();return p(()=>{new a({state:r.create({doc:o.code,extensions:[s,n()]}),parent:e.value})}),(l,m)=>(d(),f("div",{ref_key:"editorRef",ref:e},null,512))}});export{w as default};
