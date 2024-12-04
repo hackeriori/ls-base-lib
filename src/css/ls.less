@@ -110,10 +110,12 @@ each(range(4), {
         @{vt}: (@value * 0.5em);
     }
     .ls-@{vt}H-half when (@half = 1) and (@integer = 0) {
-        @{vt}: 0 (@value * 0.5em);
+        @{vt}-left: (@value * 0.5em);
+        @{vt}-right: (@value * 0.5em);
     }
     .ls-@{vt}V-half when (@half = 1) and (@integer = 0) {
-        @{vt}: (@value * 0.5em) 0;
+        @{vt}-top: (@value * 0.5em);
+        @{vt}-bottom: (@value * 0.5em);
     }
 
     .ls-@{vt}-@{integer}half when (@half = 1) and not (@integer = 0) {
@@ -121,21 +123,25 @@ each(range(4), {
     }
 
     .ls-@{vt}H-@{integer}half when (@half = 1) and not (@integer = 0) {
-        @{vt}: 0 (@value * 0.5em);
+        @{vt}-left: (@value * 0.5em);
+        @{vt}-right: (@value * 0.5em);
     }
 
     .ls-@{vt}V-@{integer}half when (@half = 1) and not (@integer = 0) {
-        @{vt}: (@value * 0.5em) 0;
+        @{vt}-top: (@value * 0.5em);
+        @{vt}-bottom: (@value * 0.5em);
     }
 
     .ls-@{vt}-@{integer} when (@half = 0) {
         @{vt}: (@value * 0.5em);
     }
     .ls-@{vt}H-@{integer} when (@half = 0) {
-        @{vt}: 0 (@value * 0.5em);
+        @{vt}-left: (@value * 0.5em);
+        @{vt}-right: (@value * 0.5em);
     }
     .ls-@{vt}V-@{integer} when (@half = 0) {
-        @{vt}: (@value * 0.5em) 0;
+        @{vt}-top: (@value * 0.5em);
+        @{vt}-bottom: (@value * 0.5em);
     }
     each(@directions, .(@vd,@kd,@id) {
       @direction: @vd;
