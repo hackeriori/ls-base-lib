@@ -1,6 +1,6 @@
 {
   "name": "ls-base-lib",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A library with no framework dependencies (e.g. vue) that encapsulates some pure native js and css. It is exported using module and umd.",
   "main": "dist/lsBaseLib.umd.js",
   "module": "dist/lsBaseLib.es.js",
