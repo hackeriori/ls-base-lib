@@ -3,6 +3,7 @@ import {ref} from "vue";
 import {funIdleRun, funTaskRun} from "../util/functionUtil";
 import ExampleBox from "../components/exampleBox/ExampleBox.vue";
 import {ElMessage} from "element-plus";
+import 'element-plus/es/components/message/style/css'
 import FibWorker from "./fibonacci.worker.ts?worker";
 import {fibonacci, type MessageType} from "./fibonacci.shared";
 
