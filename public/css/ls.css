@@ -45,6 +45,9 @@
 .ls-flex-around {
   justify-content: space-around;
 }
+.ls-flex-evenly {
+  justify-content: space-evenly;
+}
 /*flex子项属性*/
 .ls-flex-unShrink > div {
   flex-shrink: 0;
