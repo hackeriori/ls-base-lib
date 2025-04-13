@@ -39,6 +39,10 @@
       <div class="ls-flex ls-flex-around middleBox">
         <div v-for="(item,index) in 2" :key="index" class="miniBox" style="margin:5px 10px">{{ item }}</div>
       </div>
+      <div class="detail">外边框使用<span class="highlight">ls-flex ls-flex-evenly</span>来对齐主轴</div>
+      <div class="ls-flex ls-flex-evenly middleBox">
+        <div v-for="(item,index) in 2" :key="index" class="miniBox" style="margin:5px 10px">{{ item }}</div>
+      </div>
       <div class="title">flex子项属性</div>
       <div class="detail">外边框<span class="highlight">ls-flex ls-flex-unShrink</span>来批量设置不缩小</div>
       <div class="detail">内边框2使用<span class="highlight">ls-flex-subItem-grow</span>来占据剩余空间</div>

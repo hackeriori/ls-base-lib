@@ -164,3 +164,51 @@ export function funTaskRun<T>(tasks: T[] | number, numberPerTime: number, taskHa
 
   return breakExecution
 }
+
+/**
+ * 深度克隆对象
+ * @param obj - 要克隆的对象
+ * @param map - 不需要传递
+ * @returns 返回克隆后的对象
+ *
+ * @example
+ * ```typescript
+ * const original = { a: 1, b: { c: 2 } };
+ * const cloned = funDeepClone(original);
+ * console.log(cloned); // { a: 1, b: { c: 2 } }
+ * console.log(cloned === original); // false
+ * console.log(cloned.b === original.b); // false
+ * ```
+ */
+export function funDeepClone<T>(obj: T, map: WeakMap<object, any> = new WeakMap()): T {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (obj instanceof Date) {
+    return new Date(obj.getTime()) as T;
+  }
+
+  if (obj instanceof Array) {
+    const arr = obj as any[];
+    const cloneArr = arr.map(item => funDeepClone(item, map));
+    return cloneArr as T;
+  }
+
+  if (obj instanceof Object) {
+    if (map.has(obj)) {
+      return map.get(obj);
+    }
+
+    const objClone = {} as T;
+    map.set(obj, objClone);
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        objClone[key] = funDeepClone(obj[key], map);
+      }
+    }
+    return objClone;
+  }
+
+  throw new Error('Unable to clone object: unsupported type');
+}

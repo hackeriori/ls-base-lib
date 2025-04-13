@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {strGetStringExtension, strGetUrlParam, strInsertAt, strReplaceHost} from "./stringUtil";
+import {strGenerateGuid, strGetStringExtension, strGetUrlParam, strInsertAt, strReplaceHost} from "./stringUtil";
 
 describe("测试字符串插入方法", () => {
   const testString = 'abcdef';
@@ -87,3 +87,16 @@ describe('替换url中的域名部分', () => {
     expect(strReplaceHost(url3, 'aaa')).toBe(url3);
   });
 })
+
+describe('测试生成GUID方法', () => {
+  test('生成的GUID格式正确', () => {
+    const guid = strGenerateGuid();
+    expect(guid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+  });
+
+  test('生成的GUID不重复', () => {
+    const guid1 = strGenerateGuid();
+    const guid2 = strGenerateGuid();
+    expect(guid1).not.toBe(guid2);
+  });
+});

@@ -76,6 +76,21 @@ export function strReplaceHost(url: string, replaceString: string) {
   return urlObj.toString();
 }
 
+/**
+ * 生成一个全局唯一标识符（GUID）
+ *
+ * @example
+ * // returns 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+ * strGenerateGuid()
+ */
+export function strGenerateGuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 /** 日期时间格式，用于`dayjs().format` */
 export const StrDateTime = 'YYYY-MM-DD HH:mm:ss';
 /** 时间格式，用于`dayjs().format` */

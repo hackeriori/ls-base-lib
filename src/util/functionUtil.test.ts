@@ -1,5 +1,5 @@
 import {describe, expect, test, it, vi, beforeEach} from 'vitest';
-import {funDebounce, funIdleRun, funTaskRun} from "./functionUtil";
+import {funDebounce, funDeepClone, funIdleRun, funTaskRun} from "./functionUtil";
 
 describe('防抖测试', () => {
   const testBounceFun = async (fun: Function, executeTime: number) => {
@@ -222,5 +222,62 @@ describe('funTaskRun测试', () => {
     }).not.toThrow();
     // 验证完成回调是否被正确调用
     expect(finishCallback).toHaveBeenCalledWith(false);
+  });
+});
+
+describe('funDeepClone测试', () => {
+  it('克隆基本数据类型', () => {
+    expect(funDeepClone(123)).toBe(123);
+    expect(funDeepClone('hello')).toBe('hello');
+    expect(funDeepClone(true)).toBe(true);
+    expect(funDeepClone(null)).toBe(null);
+    expect(funDeepClone(undefined)).toBe(undefined);
+  });
+
+  it('克隆Date对象', () => {
+    const date = new Date();
+    const clonedDate = funDeepClone(date);
+    expect(clonedDate).not.toBe(date);
+    expect(clonedDate.getTime()).toBe(date.getTime());
+  });
+
+  it('克隆数组', () => {
+    const arr = [1, 2, {a: 3}];
+    const clonedArr = funDeepClone(arr);
+    expect(clonedArr).not.toBe(arr);
+    expect(clonedArr).toEqual(arr);
+    expect(clonedArr[2]).not.toBe(arr[2]);
+  });
+
+  it('克隆对象', () => {
+    const obj = {a: 1, b: {c: 2}};
+    const clonedObj = funDeepClone(obj);
+    expect(clonedObj).not.toBe(obj);
+    expect(clonedObj).toEqual(obj);
+    expect(clonedObj.b).not.toBe(obj.b);
+  });
+
+  it('克隆嵌套对象', () => {
+    const nestedObj = {a: 1, b: {c: 2, d: {e: 3}}};
+    const clonedNestedObj = funDeepClone(nestedObj);
+    expect(clonedNestedObj).not.toBe(nestedObj);
+    expect(clonedNestedObj).toEqual(nestedObj);
+    expect(clonedNestedObj.b).not.toBe(nestedObj.b);
+    expect(clonedNestedObj.b.d).not.toBe(nestedObj.b.d);
+  });
+
+  it('克隆包含数组的对象', () => {
+    const objWithArray = {a: 1, b: [2, 3, {c: 4}]};
+    const clonedObjWithArray = funDeepClone(objWithArray);
+    expect(clonedObjWithArray).not.toBe(objWithArray);
+    expect(clonedObjWithArray).toEqual(objWithArray);
+    expect(clonedObjWithArray.b).not.toBe(objWithArray.b);
+    expect(clonedObjWithArray.b[2]).not.toBe(objWithArray.b[2]);
+  });
+
+  it('克隆包含循环引用的对象', () => {
+    const obj: any = {a: 1};
+    obj.b = obj;
+    expect(() => funDeepClone(obj)).not.toThrow('Unable to clone object: unsupported type');
   });
 });
