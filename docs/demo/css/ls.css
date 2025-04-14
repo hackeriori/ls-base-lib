@@ -45,6 +45,9 @@
 .ls-flex-around {
   justify-content: space-around;
 }
+.ls-flex-evenly {
+  justify-content: space-evenly;
+}
 /*flex子项属性*/
 .ls-flex-unShrink > div {
   flex-shrink: 0;
@@ -262,6 +265,9 @@
 }
 .ls-paddingLeft-2 {
   padding-left: 2em;
+}
+.ls-borderBox {
+  box-sizing: border-box;
 }
 /*可交互文字样式*/
 .ls-text-hover {
