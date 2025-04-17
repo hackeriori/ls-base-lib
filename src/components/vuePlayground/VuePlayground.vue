@@ -39,7 +39,7 @@ function createSandbox() {
   // 插入通信通道号
   const temp = strInsertAt(previewTemplate, previewTemplate.indexOf('<script type="importmap">') + 36, `
 \<script\>
-const messageFlog = ${messageFlag};
+const messageFlag = ${messageFlag};
 \<\/script\>
 `);
   // 找到模块的位置并加入自定义模块
