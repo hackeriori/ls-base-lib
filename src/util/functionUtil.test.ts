@@ -85,7 +85,10 @@ describe('防抖测试', () => {
 
 describe('funIdleRun', () => {
   beforeEach(() => {
-    vi.useFakeTimers(); // 使用 Vitest 的虚拟计时器
+    // vitest3.1.0之后，requestIdleCallback被mock，所以这里需要使用虚拟计时器
+    vi.useFakeTimers({
+      toFake:['setTimeout']
+    });
   });
   it('当空闲时间足够时应该执行所有任务', () => {
     const tasks = [1, 2, 3];
