@@ -14,5 +14,7 @@
  */
 export function numFixed(num: number, decimal: number = 2): number {
   const factor = Math.pow(10, decimal);
-  return Math.round((num + Number.EPSILON) * factor) / factor;
+  // 根据小数位数动态调整 EPSILON 的倍数
+  const epsilon = Number.EPSILON * (num >= 0 ? 1 : -1);
+  return Math.round((num + epsilon) * factor) / factor;
 }

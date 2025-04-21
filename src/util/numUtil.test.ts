@@ -15,6 +15,14 @@ describe('numFixed', () => {
   });
 
   test('边界情况：有浮点误差', () => {
-    expect(numFixed(1.005)).not.toEqual(Math.round(1.005 * 100) / 100);
+    const number = numFixed(1.005);
+    expect(number).toBe(1.01);
+    expect(number).not.toEqual(Math.round(1.005 * 100) / 100);
+  });
+
+  test('边界情况：有浮点误差', () => {
+    const number = numFixed(-1.005);
+    expect(number).toBe(-1.01);
+    expect(number).not.toEqual(Math.round(-1.005 * 100) / 100);
   });
 });
