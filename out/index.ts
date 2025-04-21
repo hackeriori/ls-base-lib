@@ -5,6 +5,7 @@ export * from '../src/util/documentUtil';
 export * from '../src/util/treeUtil';
 export * from '../src/util/imgUtil';
 export * from '../src/util/arrayUtil';
+export * from '../src/util/numUtil';
 export * from '../src/library/AwaitTo';
 export * from '../src/library/WebSocketLinker'
 export * from '../src/library/Verify';
