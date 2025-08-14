@@ -84,11 +84,38 @@ export function strReplaceHost(url: string, replaceString: string) {
  * strGenerateGuid()
  */
 export function strGenerateGuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
+  // 1) 优先使用原生 randomUUID (Node 19+/浏览器)
+  const globalAny: any = globalThis as any;
+  if (typeof globalAny?.crypto?.randomUUID === 'function') {
+    return globalAny.crypto.randomUUID();
+  }
+
+  // 2) 使用 crypto.getRandomValues 生成随机字节（浏览器/Node）
+  const cryptoObj: any = globalAny?.crypto;
+  if (cryptoObj && typeof cryptoObj.getRandomValues === 'function') {
+    const randoms = new Uint8Array(16);
+    cryptoObj.getRandomValues(randoms);
+
+    // 设置版本号为 4 -> xxxx-4xxx-...
+    randoms[6] = (randoms[6] & 0x0f) | 0x40;
+    // 设置变体为 10xxxxxx
+    randoms[8] = (randoms[8] & 0x3f) | 0x80;
+
+    const hex = Array.from(randoms, (b) => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.substring(0, 8)}-${hex.substring(8, 12)}-${hex.substring(12, 16)}-${hex.substring(16, 20)}-${hex.substring(20)}`;
+  }
+
+  // 3) 回退到伪随机（非加密强度，请谨慎使用）
+  const randomsFallback: number[] = [];
+  for (let i = 0; i < 16; i++) {
+    randomsFallback[i] = Math.floor(Math.random() * 256);
+  }
+  // 设置版本号和变体
+  randomsFallback[6] = (randomsFallback[6] & 0x0f) | 0x40;
+  randomsFallback[8] = (randomsFallback[8] & 0x3f) | 0x80;
+
+  const hexFallback = randomsFallback.map((n) => n.toString(16).padStart(2, '0')).join('');
+  return `${hexFallback.substring(0, 8)}-${hexFallback.substring(8, 12)}-${hexFallback.substring(12, 16)}-${hexFallback.substring(16, 20)}-${hexFallback.substring(20)}`;
 }
 
 /** 日期时间格式，用于`dayjs().format` */
