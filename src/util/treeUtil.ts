@@ -38,7 +38,6 @@ export function treeFind<T extends NodeType<T, ChildKey>, ChildKey extends strin
 }
 
 
-
 /**
  * 在树形结构中查找符合条件的节点（递归实现）。
  *
@@ -119,7 +118,8 @@ function _treeForEach<T extends NodeType<T, ChildKey>, ChildKey extends string =
  *
  * @param nodes - 要转换的节点数组。
  * @param callback - 回调函数，用于定义如何将每个节点转换为新类型。
- * @param childKey - 子节点键，默认为 'children'。
+ * @param sourceChildKey - 源树子节点键，默认为 'children'。
+ * @param targetChildKey - 目标树子节点键，默认为 sourceChildKey。
  * @returns 转换后的节点数组。
  *
  * @example
@@ -149,21 +149,24 @@ function _treeForEach<T extends NodeType<T, ChildKey>, ChildKey extends string =
  * //   }
  * // ]
  */
-export function treeMap<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => R, childKey = 'children' as ChildKey): R[] {
-  const results: R[] = [];
+export function treeMap<T extends NodeType<T, SourceChildKey>, R extends NodeType<R, TargetChildKey>, SourceChildKey extends string = 'children', TargetChildKey extends string = SourceChildKey>(nodes: T[], callback: (node: T, parent?: T) => R, sourceChildKey = 'children' as SourceChildKey, targetChildKey = sourceChildKey as unknown as TargetChildKey): R[] {
+  const results: R[] = []
   for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const childNodes = node[childKey];
-    const result = callback(node);
-    let resultChild: R[ChildKey]
-    if (childNodes)
-      resultChild = _treeMap(childNodes, callback, node, childKey) as any;
-    else
-      resultChild = childNodes as any;
-    result[childKey] = resultChild;
-    results.push(result);
+    const node = nodes[i]
+    const childNodes = node[sourceChildKey] as unknown as T[] | null | undefined
+    const result = callback(node)
+    let resultChild: R[TargetChildKey]
+
+    if (childNodes) {
+      resultChild = _treeMap(childNodes, callback, node, sourceChildKey, targetChildKey) as any
+    } else {
+      resultChild = childNodes as any
+    }
+
+    result[targetChildKey] = resultChild
+    results.push(result)
   }
-  return results;
+  return results
 }
 
 /**
@@ -172,22 +175,26 @@ export function treeMap<T extends NodeType<T, ChildKey>, R extends NodeType<R, C
  * @param nodes - 要转换的节点数组。
  * @param callback - 回调函数，用于定义如何将每个节点转换为新类型。
  * @param parent - 父节点，默认为 undefined。
- * @param childKey - 子节点键，默认为 'children'。
+ * @param sourceChildKey - 源树子节点键，默认为 'children'。
+ * @param targetChildKey - 目标树子节点键，默认为 sourceChildKey。
  * @returns 转换后的节点数组。
  */
-function _treeMap<T extends NodeType<T, ChildKey>, R extends NodeType<R, ChildKey>, ChildKey extends string = 'children'>(nodes: T[], callback: (node: T, parent?: T) => R, parent?: T, childKey = 'children' as ChildKey): R[] {
-  const results: R[] = [];
+function _treeMap<T extends NodeType<T, SourceChildKey>, R extends NodeType<R, TargetChildKey>, SourceChildKey extends string = 'children', TargetChildKey extends string = SourceChildKey>(nodes: T[], callback: (node: T, parent?: T) => R, parent?: T, sourceChildKey = 'children' as SourceChildKey, targetChildKey = sourceChildKey as unknown as TargetChildKey): R[] {
+  const results: R[] = []
   for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const childNodes = node[childKey];
-    const result = callback(node, parent);
-    let resultChild: R[ChildKey]
-    if (childNodes)
-      resultChild = _treeMap(childNodes, callback, node, childKey) as any;
-    else
-      resultChild = childNodes as any;
-    result[childKey] = resultChild;
-    results.push(result);
+    const node = nodes[i]
+    const childNodes = node[sourceChildKey] as unknown as T[] | null | undefined
+    const result = callback(node, parent)
+    let resultChild: R[TargetChildKey]
+
+    if (childNodes) {
+      resultChild = _treeMap(childNodes, callback, node, sourceChildKey, targetChildKey) as any
+    } else {
+      resultChild = childNodes as any
+    }
+
+    result[targetChildKey] = resultChild
+    results.push(result)
   }
-  return results;
+  return results
 }

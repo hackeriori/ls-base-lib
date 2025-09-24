@@ -13,7 +13,7 @@ interface TreeNodeB {
   list: TreeNodeB[] | null | undefined,
 }
 
-interface TreeNodeC extends TreeNodeA{
+interface TreeNodeC extends TreeNodeA {
   parentID?: number,
 }
 
@@ -30,12 +30,12 @@ describe('树测试', () => {
         {id: 5, name: '5', children: null},
         {id: 6, name: '6', children: null}
       ]
-    },
+    }
   ]
   const treeDataB: TreeNodeB[] = [
     {
       key: '1', name: '1', list: [
-        {key: '2', name: '2', list: null},
+        {key: '2', name: '2', list: null}
       ]
     }, {
       key: '3', name: '3', list: [
@@ -43,7 +43,7 @@ describe('树测试', () => {
         {
           key: '5', name: '5', list: [
             {key: '6', name: '6', list: null},
-            {key: '7', name: '7', list: null},
+            {key: '7', name: '7', list: null}
           ]
         }
       ]
@@ -54,7 +54,7 @@ describe('树测试', () => {
     expect(treeFind(treeDataA, x => x.id === 3 && !x.children)).toHaveProperty('name', '3');
   });
   test('查找顶层id3', () => {
-    expect(treeFind(treeDataA, (x,y) => x.id === 3 && !y)).toBeUndefined();
+    expect(treeFind(treeDataA, (x, y) => x.id === 3 && !y)).toBeUndefined();
   });
   test('查找id7', () => {
     expect(treeFind(treeDataB, x => x.key === '7', 'list')).toHaveProperty('name', '7');
@@ -75,7 +75,7 @@ describe('树测试', () => {
     expect(treeMap(treeDataA, (node, parent) => {
       return {
         ...node,
-        parentID: parent?.id,
+        parentID: parent?.id
       } as TreeNodeC
     })).toContainEqual({
       "children": [{
@@ -92,6 +92,28 @@ describe('树测试', () => {
       "id": 1,
       "name": "1",
       "parentID": undefined
+    })
+  })
+
+  test('树遍历，children 转换为 list', () => {
+    const mapped = treeMap<TreeNodeA, TreeNodeB, 'children', 'list'>(
+      treeDataA,
+      (node) => ({
+        key: String(node.id),
+        name: node.name,
+        list: undefined
+      }),
+      'children', // 源树的子节点 key
+      'list'      // 新树的子节点 key
+    )
+
+    expect(mapped[0]).toMatchObject({
+      key: '1',
+      name: '1',
+      list: [
+        {key: '2', name: '2', list: null},
+        {key: '3', name: '3', list: null}
+      ]
     })
   })
 })
